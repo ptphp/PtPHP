@@ -1,1 +1,5 @@
-# ptphp
+# RePHP
+
+    "config": {
+        "secure-http": false
+    },
