@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {"PtPHP\\": "src/PtPHP"},
-        "files": ["src/PtPHP/functions.php","src/autoloader.php"]
+        "files": ["src/PtPHP/functions.php","src/autoload.php"]
     },
     "autoload-dev": {
         "classmap": [

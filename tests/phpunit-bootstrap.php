@@ -7,5 +7,6 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-require __DIR__ . '/../src/autoloader.php';
-require __DIR__ . '/TestConfiguration.php';
+if(is_file(__DIR__ . '/../vendor/autoload.php')) require_once __DIR__ . '/../vendor/autoload.php';
+if(is_file(__DIR__ . '/../src/autoload.php'))    require_once __DIR__ . '/../src/autoload.php';
+require_once __DIR__ . '/TestConfiguration.php';
