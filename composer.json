@@ -22,7 +22,7 @@
     "autoload": {
         "psr-4": {"PtPHP\\": "src/PtPHP"},
         "files": ["src/PtPHP/functions.php","src/autoloader.php"]
-    }
+    },
     "autoload-dev": {
         "classmap": [
             "tests/"
