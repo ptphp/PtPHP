@@ -32,6 +32,5 @@ PtPHP\PtRedis::$config = array(
     )
 );
 
-
 $env_setting_path = __DIR__."/env/".PtConfig::$env.".php";
 if(is_file($env_setting_path)) require_once $env_setting_path;
