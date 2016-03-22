@@ -109,7 +109,7 @@ class Curl{
             CURLOPT_SSL_VERIFYPEER	=> 0,
             CURLOPT_SSL_VERIFYHOST	=> 0,
             CURLOPT_IPRESOLVE       => CURL_IPRESOLVE_V4,//强制使用IPV4协议解析域名
-            CURLOPT_DNS_USE_GLOBAL_CACHE => 1,
+            CURLOPT_DNS_USE_GLOBAL_CACHE => 0,
             CURLOPT_DNS_CACHE_TIMEOUT=>5,
             CURLOPT_USERAGENT  		=> 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36',
             CURLOPT_HTTPHEADER  	=> $http_header,
