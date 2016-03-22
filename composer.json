@@ -2,7 +2,7 @@
     "name": "ptphp/ptphp",
     "type": "library",
     "minimum-stability": "dev",
-    "description": "a react and php framework.",
+    "description": "a simple php framework.",
     "keywords": ["ptphp", "framework","ptphp"],
     "homepage": "http://www.ptphp.com",
     "license": "MIT",

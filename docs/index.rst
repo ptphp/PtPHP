@@ -9,9 +9,9 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   about
-   code
-   copyright
+	about
+	code
+	copyright
 
 Indices and tables
 ==================
