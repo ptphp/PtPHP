@@ -8,5 +8,4 @@
  * file that was distributed with this source code.
  */
 if(is_file(__DIR__ . '/../vendor/autoload.php')) require_once __DIR__ . '/../vendor/autoload.php';
-if(is_file(__DIR__ . '/../src/autoload.php'))    require_once __DIR__ . '/../src/autoload.php';
 require_once __DIR__ . '/TestConfiguration.php';

@@ -9,7 +9,7 @@ class UnitTestTest extends PHPUnit_Framework_TestCase
 
     public function testAddTestSuite()
     {
-        PtPHP\print_pre(1);
+        PtPHP\Utils::print_pre(1);
         $t = new PtPHP\UnitTest();
         $t->test();
         $this->assertEquals(1, 1);

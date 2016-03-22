@@ -3,6 +3,7 @@ namespace PtPHP;
 class UnitTest
 {
     function test(){
-        echo __METHOD__;
+        echo "<br>";
+        echo __FILE__;
     }
 }
