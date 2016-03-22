@@ -1,6 +1,6 @@
 <?php
-
-class UnitTestTest extends PHPUnit_Framework_TestCase
+use PtPHP\UnitTest as UnitTest;
+class UnitTestTest extends UnitTest
 {
 
     protected function setUp()
@@ -9,9 +9,20 @@ class UnitTestTest extends PHPUnit_Framework_TestCase
 
     public function testAddTestSuite()
     {
-        PtPHP\Utils::print_pre(1);
-        $t = new PtPHP\UnitTest();
-        $t->test();
-        $this->assertEquals(1, 1);
+        $url = "http://www.sohu.com";
+        $res = $this->http_request("get",$url,array(
+            "data"=>array("username"=>"admin","password"=>111111),
+            "setting"=>array(
+                "debug"=>0,
+                "post_json"=>0,
+                "print_response"=>0,
+                "print_response_header"=>0,
+                "print_response_cookie"=>0,
+                "print_response_info"=>0,
+                "cookie_file"=>COOKIE_FILE,
+                "local_proxy"=>0,
+            )
+        ));
+        $this->assertContains("sohu",$res);
     }
 }
