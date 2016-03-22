@@ -12,28 +12,24 @@
     -->
     <php>
         <!-- MySQL -->
-        <env name="TESTS_PHINX_DB_ADAPTER_MYSQL_ENABLED" value="true" />
-        <env name="TESTS_PHINX_DB_ADAPTER_MYSQL_HOST" value="localhost" />
-        <env name="TESTS_PHINX_DB_ADAPTER_MYSQL_USERNAME" value="root" />
-        <env name="TESTS_PHINX_DB_ADAPTER_MYSQL_PASSWORD" value="" />
-        <env name="TESTS_PHINX_DB_ADAPTER_MYSQL_DATABASE" value="phinx_testing" />
-        <env name="TESTS_PHINX_DB_ADAPTER_MYSQL_PORT" value="3306" />
+        <env name="TESTS_ENV" value="true" />
     </php>
 
-    <testsuite name="RePHP Test Suite">
+    <testsuite name="PtPHP Test Suite">
+        <directory suffix="Test.php">tests</directory>
         <directory>./tests/</directory>
     </testsuite>
 
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Rephp/</directory>
+            <directory suffix=".php">src/PtPHP/</directory>
         </whitelist>
     </filter>
 
-    <logging>
-        <log type="coverage-html" target="./tests/log/report" charset="UTF-8"
-            yui="true" highlight="true"
-            lowUpperBound="50" highLowerBound="80"/>
-        <log type="testdox-html" target="./tests/log/testdox.html" />
-    </logging>
+    <!--<logging>-->
+    <!--<log type="coverage-html" target="./tests/log/report" charset="UTF-8"-->
+    <!--yui="true" highlight="true"-->
+    <!--lowUpperBound="50" highLowerBound="80"/>-->
+    <!--<log type="testdox-html" target="./tests/log/testdox.html" />-->
+    <!--</logging>-->
 </phpunit>
