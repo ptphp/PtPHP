@@ -19,3 +19,5 @@
  * Phinx_Db_Adapter_MysqlAdapter
  */
 defined('TESTS_ENV') || define('TESTS_ENV', getenv('TESTS_ENV'));
+defined('COOKIE_FILE') || define('COOKIE_FILE', getenv('/tmp/ptphp.cookie'));
+
