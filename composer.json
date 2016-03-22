@@ -1,7 +1,7 @@
 {
     "name": "ptphp/ptphp",
     "type": "library",
-    "minimum-stability": "dev",
+    "minimum-stability": "RC",
     "description": "a simple php framework.",
     "keywords": ["ptphp", "framework","ptphp"],
     "homepage": "http://www.ptphp.com",
