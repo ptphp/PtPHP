@@ -145,7 +145,7 @@ class Curl{
         $res = array();
         $res['header'] = '';
         $res['http_code'] = $info['http_code'];
-        $res['redirect_url'] = $info['redirect_url'];
+        $res['redirect_url'] = empty($info['redirect_url'])?$info['redirect_url']:"";
         $res['info'] = $info;
         $res['cookie_file'] = $cookie_save_file;
         $res['cookie'] = $this->get_cookie($cookie_save_file);
