@@ -5,6 +5,7 @@
  */
 
 if(PHP_SAPI != 'cli'){
+
 }
 
 define("PATH_APP",__DIR__);
@@ -16,8 +17,6 @@ define("PATH_TESTS",   PATH_PRO."/Tests");
 define("PATH_LIBS",   PATH_APP."/libs");
 define("PATH_VENDOR",   PATH_PRO."/vendor");
 
-//define("LocalPtphpAutoloadPath",'/data/projects/ptphp/src/autoload.php');
-//if(is_file(LocalPtphpAutoloadPath)) include_once LocalPtphpAutoloadPath;
 if(!is_file(PATH_VENDOR."/autoload.php")){
     throw new Exception("没有安装 composer");
 }else{

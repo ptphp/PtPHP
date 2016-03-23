@@ -28,9 +28,10 @@ PtPHP\Database::$config = array(
 PtPHP\PtRedis::$config = array(
     "default"=>array(
         "host"=>"127.0.0.1",
-        "port"=>27017
+        "port"=>51805
     )
 );
+
 
 $env_setting_path = __DIR__."/env/".PtConfig::$env.".php";
 if(is_file($env_setting_path)) require_once $env_setting_path;

@@ -67,7 +67,7 @@ class Utils {
         return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/u', create_function('$match', 'return mb_convert_encoding(pack("H*", $match[1]), "utf-8", "UTF-16BE");'), $str);
     }
     static function is_local_dev(){
-        return self::get_pt_env("PT_ENV") == 'local';
+        return self::get_pt_env("PT_LOCAL") == 'local';
     }
     static function get_pt_env($key){
         if(self::is_cli()){

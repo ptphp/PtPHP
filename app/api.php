@@ -4,18 +4,6 @@ use PtPHP\Logger as Logger;
 
 include_once __DIR__."/init.php";
 
-if(Utils::is_local_dev()){
-    error_reporting(E_ALL);
-    ini_set( 'display_errors', 'On' );
-    header('content-type:application:json;charset=utf8');
-    header('Access-Control-Allow-Origin:*');
-    header('Access-Control-Allow-Methods:POST, GET');
-    header('Access-Control-Allow-Headers:x-requested-with,content-type');
-}else{
-    error_reporting(0);
-    ini_set( 'display_errors', 'Off' );
-}
-
 $result = null;
 $error_code = 0;
 try {
@@ -30,15 +18,31 @@ try {
     $c_t = explode("/",$controller);
     $controller = "Controller";
     foreach($c_t as $i){
-        if($i) $controller .= "_".ucfirst(strtolower($i));
+        if($i) $controller .= "\\".ucfirst(strtolower($i));
     }
-    if(!class_exists($controller)) _throw($controller." is no exsits",9003);
 
-    $controller_obj = new $controller();
+    if(!class_exists($controller)) _throw($controller." is no exsits",9003);
     $action = "action_".strtolower($action);
     define("__NODE__",$controller."::".$action);
-    if(!method_exists($controller_obj,$action)) _throw($controller."::$action is no exsits",9004);
-    $return = $controller_obj->$action();
+    if(1){
+        $reflection = new ReflectionMethod($controller, $action);
+        $fire_args = array();
+        foreach($reflection->getParameters() AS $arg)
+        {
+            if(isset($_REQUEST[$arg->name]))
+                $fire_args[$arg->name] = $_REQUEST[$arg->name];
+            else
+                $fire_args[$arg->name] = null;
+        }
+        $controller_obj = new $controller();
+        $return = call_user_func_array(array($controller_obj, $action), $fire_args);
+    }else{
+        $controller_obj = new $controller();
+        if(!method_exists($controller_obj,$action)) _throw($controller."::$action is no exsits",9004);
+        //$return = $controller_obj->$action();
+        $return = call_user_func_array(array($controller_obj, $action), array());
+    }
+
     if($return !== null) $result = $return;
 
 }catch(AppException $e){

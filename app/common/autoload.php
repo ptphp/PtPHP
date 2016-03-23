@@ -1,18 +1,12 @@
 <?php
 
-function pt_autoload($classname)
+function pt_autoload($class)
 {
-    $path = "";
-    if(defined("PATH_MODEL") && substr($classname,0,6) == "Model_"){
-        $path = PATH_MODEL . "/" . str_replace("_", "/", strtolower(substr($classname,6))) . ".php";
-    }
-    if(defined("PATH_CONTROLLER") && substr($classname,0,11) == "Controller_"){
-        $path = PATH_CONTROLLER . "/" . str_replace("_", "/", strtolower(substr($classname,11))) . ".php";
-    }
-    if($path && is_file($path)){
-        require_once($path);
+    $path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+    $file = __DIR__ . '/../src/' . $path . '.php';
+    if (file_exists($file)) {
+        require_once $file;
     }
 }
 
 spl_autoload_register('pt_autoload');
-

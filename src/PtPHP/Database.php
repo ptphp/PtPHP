@@ -216,7 +216,37 @@ class Database {
         }
         $this->select_row("select count($pk) as $total from $talbe where $where",$args);
     }
-
+    public function get_last_sql(){
+        return self::$run_stack[0];
+    }
+    //返回一维数组
+    public function row($sql){
+        $args = func_get_args();
+        if(count($args) > 1){
+            if(is_array($args[1])){
+                $args = $args[1];
+            }else{
+                array_shift($args);
+            }
+        }else{
+            $args = array();
+        }
+        return $this->run($sql,$args,TRUE,'one');
+    }
+    //返回二维数组
+    public function rows($sql){
+        $args = func_get_args();
+        if(count($args) > 1){
+            if(is_array($args[1])){
+                $args = $args[1];
+            }else{
+                array_shift($args);
+            }
+        }else{
+            $args = array();
+        }
+        return $this->run($sql,$args,TRUE,'all');
+    }
     //返回一维数组
     public function select_row($sql){
         $args = func_get_args();
@@ -288,7 +318,7 @@ class Database {
         );
         return $sql;
     }
-    public  function run($sql,$args = array(),$return = FALSE,$returnType = 'one',$fetcheType = PDO::FETCH_ASSOC) {
+    public function run($sql,$args = array(),$return = FALSE,$returnType = 'one',$fetcheType = PDO::FETCH_ASSOC) {
         $RSarray = array();
         try{
             $this->last_sql = $sql;
