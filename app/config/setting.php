@@ -5,7 +5,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  */
 class PtConfig{
-    static $env = "development";
+    public static $env = "development";
 }
 date_default_timezone_set('Asia/Shanghai');
 error_reporting(0);
