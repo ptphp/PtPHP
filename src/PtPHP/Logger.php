@@ -87,7 +87,7 @@ class Logger{
             echo self::get_format_msg($log,$exception_point).PHP_EOL;
         }else{
             try{
-                file_put_contents($filename, self::get_format_msg($log,$exception_point), FILE_APPEND);
+                @file_put_contents($filename, self::get_format_msg($log,$exception_point), FILE_APPEND);
             }catch(Exception $e){
                 error_log($filename." is not exsits\n".self::get_format_msg($log),0);
             }
