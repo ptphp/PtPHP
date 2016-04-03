@@ -32,6 +32,7 @@ tests/log
 
 # this is user specific settings for running phpunit to override the defaults in phpunit.xml.dist
 #phpunit.xml
-
+phinx.yml
 app/config/.env.php
+app/config/env/development.php
 app/config/phinx.yml
