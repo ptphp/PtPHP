@@ -130,6 +130,9 @@ class Database {
             }
             $this->conn->query("set names ".$_config['charset'].";");
             $this->conn->setAttribute(PDO::ATTR_TIMEOUT, 30);
+            if(version_compare(PHP_VERSION, '5.6.0') >=1 && version_compare(PHP_VERSION, '7.0.0') == -1){
+                $this->conn->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+            }
             //$this->conn->query("set interactive_timeout=24*3600;");
             $this->setSafe();
             $this->setErrMode();
