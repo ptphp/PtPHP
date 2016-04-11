@@ -7,8 +7,23 @@
  */
 
 namespace PtPHP;
-
+use PtConfig;
 class Model{
+    static function is_production(){
+        return PtConfig::$env === 'production';
+    }
+    static function is_testing(){
+        return PtConfig::$env === 'testing';
+    }
+    static function is_development(){
+        return PtConfig::$env === 'development';
+    }
+    static function _table($name,$key = "default"){
+        $db = self::_db($key);
+        $config = $db::$config;
+        $prefix = $config[$key]['prefix'];
+        return $prefix.$name;
+    }
     static function _db($key = "default"){
         return Database::init($key);
     }
