@@ -1,0 +1,6 @@
+{
+    "require": {
+        "ptphp/ptphp": "^0.0.15",
+        "qiniu/php-sdk": "^7.0"
+    }
+}

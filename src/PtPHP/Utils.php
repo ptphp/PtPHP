@@ -123,16 +123,20 @@ class Utils {
      * @return string
      */
     static function current_url_address() {
-        $domain = self::current_domain();
-        $php_self = self::server_param("PHP_SELF") ? self::server_param("PHP_SELF") : self::server_param("SCRIPT_NAME");
-        $path_info = self::server_param("PATH_INFO") ? self::server_param("PATH_INFO") : '';
-        $request_uri = self::server_param("REQUEST_URI");
-        if(self::server_param("REQUEST_URI")){
-            $relate_url = self::server_param("REQUEST_URI");
-        }
         //todo
-        $url = $domain.$relate_url;
-        return $url;
+        $request_uri = self::server_param("REQUEST_URI");
+        return "http://".$_SERVER['HTTP_HOST'].$request_uri;
+//        $domain = self::current_domain();
+//        $php_self = self::server_param("PHP_SELF") ? self::server_param("PHP_SELF") : self::server_param("SCRIPT_NAME");
+//        $path_info = self::server_param("PATH_INFO") ? self::server_param("PATH_INFO") : '';
+//        $request_uri = self::server_param("REQUEST_URI");
+//        if(self::server_param("REQUEST_URI")){
+//            $relate_url = self::server_param("REQUEST_URI");
+//        }
+//        //todo
+//        $url = $domain.$relate_url;
+//        echo $url;exit;
+//        return $url;
     }
     static function current_domain(){
         static $domain = null;

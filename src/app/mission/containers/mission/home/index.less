@@ -1,0 +1,93 @@
+.mission-list {
+    .weui_media_box {
+        position: relative;
+        height: 90px;
+        padding:0 0 10px 0;
+        .weui_media_hd {
+            position: absolute;
+            top:10px;
+            left:15px;
+            width: 60px;
+            height: 60px;
+            margin-right:0
+        }
+        .weui_media_bd{
+            position: absolute;
+            top:10px;
+            left: 90px;
+            right: 80px;
+        }
+        .weui_media_desc{
+            margin-top:3px;
+            -webkit-line-clamp:3
+        }
+        .jiangli{
+            position: absolute;
+            top: 26px;
+            right: 14px;
+            color: #559d39;
+            font-size: 20px;
+
+        }
+        .jiangli:before{
+            content:"￥";
+            top: 1px;
+            position: relative;
+            font-size: 12px;
+
+        }
+
+        .award{
+            color: #f4bc37;
+            border: 1px solid #f4bc37;
+            padding: 0 2px;
+            border-radius: 3px;
+            height: 13px;
+            line-height: 14px;
+            font-size: 10px;
+            margin-left: 2px;
+            top: 58px;
+            right: 33px;
+            position: absolute;
+        }
+    }
+    .no_result{
+        padding-top:20px;
+        padding-bottom:30px;
+        margin-left:20px;
+        margin-right:20px;
+        text-align: center;
+        color:#98989C;
+        position: relative;
+        .line_mid{
+            position: absolute;
+            top: 32px;
+            border-bottom: 1px solid #e1e1e1;
+            left: 0;
+            right: 0;
+            z-index: 1;
+        }
+        .row{
+            position: relative;
+            padding-left:15px;
+            padding-right:15px;
+            z-index: 2;
+            display: inline-block;
+            background-color: white;
+            .left,.right{
+                position: absolute;
+                width: 8px;
+                height: 8px;
+                top:9px;
+                background-color: #e1e1e1;
+                border-radius: 50%;
+            }
+            .left{
+                left:-7px;
+            }
+            .right{
+                right:-7px;
+            }
+        }
+    }
+}

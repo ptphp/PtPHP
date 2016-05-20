@@ -1,0 +1,222 @@
+html, body, .container {
+    height: 100%;
+}
+
+
+body {
+    background-color: #FBF9FE;
+    overflow-x: hidden;
+}
+
+.container{
+    overflow: hidden;
+}
+
+header {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 44px;
+    background-color: #efeff4;
+    position: relative;
+    line-height: 44px;
+    padding: 0 0;
+    button{
+        text-rendering: auto;
+        color: initial;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-transform: none;
+        text-indent: 0;
+        text-shadow: none;
+        display: inline-block;
+        text-align: start;
+        margin: 0 0 0 0;
+        font: 17px BlinkMacSystemFont;
+    }
+    .NavigationBarLeftButton, .NavigationBarRightButton {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-transition: opacity 80ms;
+        -o-transition: opacity 80ms;
+        transition: opacity 80ms;
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        -o-transform: translateZ(0);
+        transform: translateZ(0);
+        background: none;
+        color: #007aff;
+        border: none;
+        bottom: 0;
+        line-height: 44px;
+        height: 44px;
+        outline: none;
+        position: absolute;
+        z-index: 2;
+        -webkit-appearance: none;
+    }
+    .NavigationBarLeftButton{
+        min-width: 40px;
+    }
+    .NavigationBarLeftArrow ,.NavigationBarRightIcon{
+        background-image: -webkit-linear-gradient(left, #efeff4 50%, rgba(239, 239, 244, 0) 100%);
+        background-image: -o-linear-gradient(left, #efeff4 50%, rgba(239, 239, 244, 0) 100%);
+        background-image: linear-gradient(to right, #efeff4 50%, rgba(239, 239, 244, 0) 100%);
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffefeff4', endColorstr='#00efeff4', GradientType=1);
+        display: inline-block;
+        font-family: "iconfont";
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: inherit;
+        font-size: 24px;
+        line-height: inherit;
+    }
+    .NavigationBarLeftArrow, .NavigationBarLeftIcon {
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        -o-transform: translateZ(0);
+        transform: translateZ(0);
+        bottom: 0;
+        left: 0;
+        line-height: inherit;
+        position: absolute;
+        text-align: center;
+        vertical-align: top;
+        width: 28px;
+        z-index: 3;
+    }
+    .NavigationBarLeftArrow::before {
+        content: attr(icon);
+    }
+    .has-arrow .NavigationBarLeftLabel {
+        left: 28px;
+    }
+    .NavigationBarLeftLabel {
+        -webkit-transform: translateZ(0);
+        -ms-transform: translateZ(0);
+        -o-transform: translateZ(0);
+        transform: translateZ(0);
+        bottom: 0;
+        color: inherit;
+        display: inline-block;
+        left: 8px;
+        vertical-align: top;
+        line-height: 44px;
+        height: 44px;
+        position: absolute;
+    }
+    .NavigationBarRightButton {
+        right: 12px;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .NavigationBarRightIcon::before {
+        content: attr(icon);
+    }
+    .title {
+        bottom: 0;
+        font-weight: 500;
+        height: 44px;
+        left: 0;
+        line-height: 44px;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+        z-index: 1;
+        font-size: 17px;
+    }
+    .sub_title {
+        text-align: center;
+        color: #888;
+        font-size: 14px;
+    }
+    &::after{
+        width: 100%;
+        height: 1px;
+        background-color: rgba(158, 158, 158, 0.28);
+        bottom: -1px;
+        content: " ";
+        left: 0;
+        position: absolute;
+    }
+}
+
+.page {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #FBF9FE;
+
+    .bd {
+        &.spacing {
+            padding: 0 15px;
+        }
+    }
+
+    &.cell {
+        .bd {
+            padding-bottom: 30px;
+        }
+    }
+
+    &.home {
+        &.page-enter {
+            z-index: 0;
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+            &.page-enter-active {
+
+            }
+        }
+        &.page-leave {
+            &.page-leave-active {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+    }
+
+    &.panel {
+        .bd{
+            padding-bottom:20px;
+        }
+    }
+}
+
+.page-enter {
+    z-index: 1024;
+    opacity: 0.01;
+    transform: translate3d(100%, 0, 0);
+    transition: all .1s;
+    &.page-enter-active {
+        opacity: 1;
+        //transform: translate3d(0, 0, 0);
+    }
+}
+
+.page-leave {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition: all .1s;
+    &.page-leave-active {
+        opacity: 0.01;
+        //transform: translate3d(100%, 0, 0);
+    }
+}
+p{
+
+}

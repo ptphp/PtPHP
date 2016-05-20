@@ -1,0 +1,22 @@
+#root{
+    height: 100%
+}
+a{
+    outline: none;
+}
+:focus{
+    outline: none;
+}
+body{
+    user-select: none;
+}
+
+.weui_mask{
+    z-index: 10;
+}
+.weui_actionsheet{
+    z-index: 10;
+}
+.weui_mask_transparent{
+    z-index: 10;
+}

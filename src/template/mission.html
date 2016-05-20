@@ -1,0 +1,35 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>...</title>
+  <script>
+    window.production = false;
+    window.apiUrl = "http://mission.dev.solardian.com/mission/service/api.php";
+    window.auth = {
+      user_id:6410173,
+      wx_auth_info:null,
+    };
+    window.SSO_AUTH_URL = 'http://ldt.ptphp.com/index.php?m=Wechat&c=Auth&a=login&continue=';
+    window.get_sso_auth_login_url = function(){
+      var c_url = location.href;
+      if(c_url.indexOf("?") > 0){
+        c_url += "&from=sso";
+      }else{
+        c_url += "?from=sso";
+      }
+      return window.SSO_AUTH_URL + encodeURIComponent(c_url);
+    };
+    window.go_login = function(){
+      location.href = window.get_sso_auth_login_url();
+    };
+  </script>
+</head>
+<body ontouchstart>
+<div class="container" id="root"></div>
+<script src="/webpack/vendor.js"></script>
+<script src="/webpack/mission.js"></script>
+</body>
+</html>

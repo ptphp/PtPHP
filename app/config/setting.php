@@ -7,7 +7,18 @@ use PtPHP\Utils as Utils;
  */
 class PtConfig{
     public static $env = "development";
-    public static $userRsaAuth = "false";
+    public static $qiniu = array(
+        "access_key"=>"zlbOjuyGIUaq73PhpZVetqvcPIPk6EgugFHY3N-y",
+        "secret_key"=>"7uiio8iIRfqOtlYqGpZpp7G3IpyUVOO5-QPkWkja",
+        "bucket"=>"lvdiantong",
+        "domain"=>"7xq9wj.com1.z0.glb.clouddn.com"
+    );
+    public static $userRsaAuth = true;
+    public static $safeLogin = array(
+        "username"=>"",
+        "password"=>"",
+    );
+    public static $siteAdminTitle = "绿电通";
 }
 
 $env = Utils::get_pt_env("APPLICATION_ENV");
@@ -22,6 +33,7 @@ if(is_file(PATH_PRO."/phinx.yml")){
 }elseif(is_file(PATH_APP."/config/phinx.yml")){
     $phinx_config = Yaml::parse(@file_get_contents(PATH_APP."/config/phinx.yml"));
 }
+
 if($phinx_config){
     $db_config = $phinx_config['environments'][PtConfig::$env];
     PtPHP\Database::$config = array(
@@ -33,16 +45,10 @@ if($phinx_config){
             'dbuser'=>$db_config['user'],
             'dbpass'=>$db_config['pass'],
             'charset'=>$db_config['charset'],
+            'prefix'=>$db_config['table_prefix'],
         )
     );
 }
-
-PtPHP\PtRedis::$config = array(
-    "default"=>array(
-        "host"=>"127.0.0.1",
-        "port"=>6379
-    )
-);
 
 $env_setting_path = __DIR__."/env/".PtConfig::$env.".php";
 if(is_file($env_setting_path)) require_once $env_setting_path;

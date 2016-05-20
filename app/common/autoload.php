@@ -7,8 +7,8 @@ function pt_autoload($class)
     if (file_exists($file)) {
         require_once $file;
     }else{
-        if(defined("PATH_MODEL") && substr($class,0,6) == "Model_"){
-            require_once PATH_MODEL . "/" . str_replace("_", "/", strtolower(substr($class,6))) . ".php";
+        if(defined("PATH_MODELS") && substr($class,0,6) == "Model_"){
+            require_once PATH_MODELS . "/" . str_replace("_", "/", strtolower(substr($class,6))) . ".php";
         }
     }
 }

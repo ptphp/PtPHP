@@ -1,0 +1,14 @@
+{
+  "mission": {
+      "site_title":"绿电任务",
+      "status":1
+  },
+  "manage": {
+      "site_title":"管理后台",
+      "status":1
+  },
+  "weui": {
+      "site_title":"weui demo",
+      "status":0
+  }
+}

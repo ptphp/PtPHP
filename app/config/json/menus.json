@@ -1,0 +1,13 @@
+[
+    {
+        "key":"/mission",
+        "title":"任务管理",
+        "icon":"bars",
+        "sub":[
+            {
+                "title":"任务列表",
+                "key":"/mission/list"
+            }
+        ]
+    }
+]

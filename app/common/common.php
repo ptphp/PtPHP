@@ -8,7 +8,8 @@ function api_json_response($result,$error_code = 0){
         "error"=>$error_code,
         "result"=>$result,
     );
-    if(isset($_REQUEST['access_token'])) $response['access_token'] = Model_Session::session_id();
+    if(class_exists("Model_Session"))
+        if(isset($_REQUEST['access_token'])) $response['access_token'] = Model_Session::session_id();
     echo json_encode($response);exit;
 }
 
@@ -99,4 +100,18 @@ class CUtf8_PY {
             return $result;
         }
     }
+}
+
+function handle_mysql_in_ids($ids){
+    if(empty($ids)) _throw("没有选中记录");
+    $ids = explode(",",$ids);
+    $_ids = array();
+    foreach($ids as $id){
+        if(is_numeric($id)){
+            $_ids[] = intval($id);
+        }
+    }
+    if(empty($_ids)) _throw("没有选中记录");
+    PtPHP\Model::_debug($_ids);
+    return implode(",",$_ids);
 }
