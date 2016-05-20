@@ -33,7 +33,7 @@ tests/log
 #phpunit.xml
 phinx.yml
 
-
+webpack.config.js
 src/config/app.json
 
 app/config/phinx.yml

@@ -11,6 +11,7 @@ environments:
         name: production_db
         user: root
         pass: ''
+        table_prefix: ldt_
         port: 3306
         charset: utf8
 
@@ -20,6 +21,7 @@ environments:
         name: development_db
         user: root
         pass: ''
+        table_prefix: ldt_
         port: 3306
         charset: utf8
 
@@ -29,5 +31,6 @@ environments:
         name: testing_db
         user: root
         pass: ''
+        table_prefix: ldt_
         port: 3306
         charset: utf8

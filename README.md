@@ -2,12 +2,6 @@
 [![Latest Stable Version](https://poser.pugx.org/ptphp/ptphp/v/stable.png)](https://packagist.org/packages/ptphp/ptphp)
 
 
-# 网址:
-
-- [开发域名: mission.dev.solardian.com](http://mission.dev.solardian.com/)
-
-
-
 # 目录结构
 
     project
@@ -38,3 +32,31 @@
     ├── composer.json           # composer.json
     ├── phinx.yml               # 数据库配置
     └── webpack.config.js       # webpack配置文件
+    
+    
+# 安装
+    
+    npm install webpack-dev-server webpack -g -d
+    cp package.dist.json package.json
+    npm install -d
+    npm run fix_antd
+    cp composer.dist.json composer.json
+    composer config repo.packagist composer https://packagist.phpcomposer.com
+    composer clearcache
+    composer install
+    composer require ptphp/ptphp
+    
+
+# 配置
+    
+    #数据库
+    cp phinx.dist.yml phinx.yml
+    
+    #系统配置
+    cp app/config/env/development.dist.php app/config/env/development.php
+    
+    #前段配置
+    cp app/config/app.dist.json app/config/app.json
+    
+    #系统环境(虚拟主机专用)
+    cp app/config/.env.dist.php app/config/.env.php 

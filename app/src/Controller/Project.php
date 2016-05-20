@@ -21,12 +21,12 @@ class Project extends Model{
     }
 
     static function get_project_apps(){
-        $path = PATH_PRO."/src/config/app.json";
+        $path = PATH_PRO."/app/config/app.json";
         if(!is_file($path)) die("not found app.json");
         return json_decode(file_get_contents($path),1);
     }
     static function get_project_json(){
-        $path = PATH_WEBROOT."/mission/static/assets/webpack-assets.json";
+        $path = PATH_WEBROOT."/static/assets/webpack-assets.json";
         if(!is_file($path)) die("not found webpack-assets.json");
         $json = json_decode(file_get_contents($path),1);
         return $json;
@@ -89,12 +89,12 @@ class Project extends Model{
         $site_title = empty($project['site_title'])?"project":$project['site_title'];
         $json = self::get_project_json();
         if(!isset($json[$app])) die("no foud app in webpack-assets.json");
-        $app_css_url = "/mission/static/assets/".$json[$app]['css'];
-        $vendor_js_url = "/mission/static/assets/".$json['vendor']['js'];
-        $app_js_url = "/mission/static/assets/".$json[$app]['js'];
+        $app_css_url = "/static/assets/".$json[$app]['css'];
+        $vendor_js_url = "/static/assets/".$json['vendor']['js'];
+        $app_js_url = "/static/assets/".$json[$app]['js'];
         $antd_js_url = null;
         if($app == "manage"){
-            $antd_js_url = isset($json['antd']) ? "/mission/static/assets/".$json['antd']['js'] : null;
+            $antd_js_url = isset($json['antd']) ? "/static/assets/".$json['antd']['js'] : null;
         }
 
         if($app == "mission"){

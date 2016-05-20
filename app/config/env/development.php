@@ -20,3 +20,5 @@ PtPHP\Logger::init(array(
         'ALL'	=> PATH_PRO.'/logs/'.date("Y-m-d").'.log',
     ),
 ));
+PtConfig::$safeLogin['username'] = "admin";
+PtConfig::$safeLogin['password'] = "admin@2016";

@@ -46,12 +46,11 @@ if(!empty($_SESSION['wx_openid']) && $user_id){
             //alert([errorMessage, scriptURI, lineNumber,columnNumber,errorObj].join(" | "))
         }
         window.production = <?php echo PtConfig::$env == "production" ? "true":"false"?>;
-        window.apiUrl = "/mission/service/api.php";
+        window.apiUrl = "/api.php";
         window.auth = {
             is_logined:<?php echo $user_id ? "true":'false';?>,
             wx_auth_info:<?php echo $wx_auth_info ? $wx_auth_info:'null';?>,
         };
-        window.SSO_AUTH_URL = '<?php echo SSO_AUTH_URL;?>';
         window.get_sso_auth_login_url = function(){
             var c_url = location.href;
             if(c_url.indexOf("#") > 0){

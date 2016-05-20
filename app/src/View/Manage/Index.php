@@ -14,7 +14,7 @@
             //alert([errorMessage, scriptURI, lineNumber,columnNumber,errorObj].join(" | "))
         }
         window.production = <?php echo PtConfig::$env == "production" ? "true":"false"?>;
-        window.apiUrl = "/mission/service/api.php";
+        window.apiUrl = "/api.php";
     </script>
 </head>
 <body ontouchstart>

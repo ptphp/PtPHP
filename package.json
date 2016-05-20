@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "react",
   "scripts": {
-    "php": "php -S localhost:8080 -t ./webroot",
+    "php": "php -S localhost:8080 -t ./webroot ./etc/php/router.php",
+    "app": "node node_modules/react-native/local-cli/cli.js start",
     "start": "NODE_ENV=development webpack-dev-server --hot --inline --progress --colors --port 3000 --host 127.0.0.1",
     "build:pre": "rimraf ./webroot/mission/static/build/css/ ./webroot/mission/static/build/js/ ./webroot/mission/static/build/img/ ./webroot/mission/static/build/webpack-assets.json",
     "build:after": "touch ./webroot/mission/static/assets/webpack-assets.json && cp ./webroot/mission/static/assets/webpack-assets.json ./logs/webpack-assets.$(date \"+%Y_%m_%d_%H_%M_%S\").json && cp -R ./webroot/mission/static/build/* ./webroot/mission/static/assets/",
