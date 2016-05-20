@@ -57,6 +57,22 @@
     
     #前段配置
     cp app/config/app.dist.json app/config/app.json
+    #webpack config
+    cp webpack.config.dist.js webpack.config.js 
     
     #系统环境(虚拟主机专用)
-    cp app/config/.env.dist.php app/config/.env.php 
+    #cp app/config/.env.dist.php app/config/.env.php 
+    
+    
+# 运行
+    
+    npm run start
+    npm run php
+
+# open in browser
+
+    http://127.0.0.1:3080
+    
+# 编译
+
+    npm run build

@@ -18,7 +18,7 @@ class Model_Admin_Role extends Model{
         }
         $permissions = Utils::unicodeString($permissions);
 
-        $table = self::_table("org_role_perm");
+        $table = self::_table("role_perm");
         $row = self::_db()->select_row("select * from $table where role_id = ?",$role_id);
         if($row){
             $role_id = $row['role_id'];
@@ -38,7 +38,7 @@ class Model_Admin_Role extends Model{
         $permissions['工作台'] = true;
         $permissions['工作台/个人中心'] = true;
         if(empty($role_id)) return $permissions;
-        $table = self::_table("org_role_perm");
+        $table = self::_table("role_perm");
         $row = self::_db()->select_row("select perm from $table where role_id = ?",$role_id);
         if($row && $row['perm']){
             $permissions = json_decode($row['perm'],1);

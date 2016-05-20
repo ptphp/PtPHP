@@ -1,10 +1,12 @@
 'use strict';
 var React = require('react');
+var Sentry = require('react-sentry');
+
 import ManageView from '../components/ManageView.jsx';
 import 'antd/lib/index.css';
 import 'simditor/styles/simditor.css';
 require('./main.less');
-var Sentry = require('react-sentry');
+
 var DataStore = require('../stores/DataStore');
 var dataStore = new DataStore();
 window.dataStore = dataStore;

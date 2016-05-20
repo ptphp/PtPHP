@@ -8,9 +8,12 @@ $uri = $_SERVER["REQUEST_URI"];
 
 // let server handle files or 404s
 if (!file_exists($path) || is_file($path))  {
+    if(!file_exists($path) && (
+            strpos( $_SERVER["REQUEST_URI"],"/webpack") !== false ||
+            strpos( $_SERVER["REQUEST_URI"],"hot-update.js") !== false
 
-    if(!file_exists($path) && strpos( $_SERVER["REQUEST_URI"],"/webpack") !== false){
-        $url = "http://127.0.0.1:3000/".$_SERVER["REQUEST_URI"];
+        )){
+        $url = "http://127.0.0.1:3079/".$_SERVER["REQUEST_URI"];
         header('Location: ' . $url );
         exit;
     }

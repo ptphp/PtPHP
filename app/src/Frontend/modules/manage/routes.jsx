@@ -1,7 +1,6 @@
 'use strict';
 import React from 'react';
 import {Router, Route, Redirect} from 'react-router';
-
 import App from './containers/App';
 
 import { Auth,AuthLogin } from './containers/auth/index';
@@ -73,18 +72,10 @@ import {
 } from './containers/report/index';
 
 import {
-    SolardianOrderListView,
-    SolardianView,
-    SolardianApiListView,
-    SolardianPkgListView,
-} from './containers/solardian/index';
-
-import {
     SystemSettingListView,
     SystemLogListView,
     SystemView
 } from './containers/system/index';
-
 
 import {
     EcView,
@@ -92,8 +83,11 @@ import {
     EcGoodsListView,
     EcOrderListView
 } from './containers/ec/index';
+
 window.Utils = require("../../utils");
+
 const NotFound = React.createClass({render () {return <h1>404 Not Found</h1>;}});
+
 const requireLogin = (nextState, replace, cb) => {cb();};
 const AppRoutes = (
     <Router ignoreScrollBehavior>
@@ -114,11 +108,6 @@ const AppRoutes = (
 
                 <Route path="desktop" breadcrumbName="工作台" component={DesktopView}>
                     <Route path="dashboard" breadcrumbName="个人中心" component={WorkView}/>
-                </Route>
-                <Route path="solardian" breadcrumbName="绿电中心" component={SolardianView}>
-                    <Route path="order" breadcrumbName="缴费订单" component={SolardianOrderListView}/>
-                    <Route path="package" breadcrumbName="绿电套餐" component={SolardianPkgListView}/>
-                    <Route path="api" breadcrumbName="缴费接口" component={SolardianApiListView}/>
                 </Route>
                 <Route path="dict" breadcrumbName="字典" component={DictView}>
                     <Route path="area" breadcrumbName="地区" component={DictAreaListView}/>
