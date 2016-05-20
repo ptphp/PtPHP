@@ -14,9 +14,11 @@ if (!file_exists($path) || is_file($path))  {
         header('Location: ' . $url );
         exit;
     }
-
-
-    return false;
+    if(!file_exists($path) && strpos( $_SERVER["REQUEST_URI"],"/favicon.ico") !== false){
+        exit;
+    }
+    //error_log(var_export($_SERVER,1));
+    return false;// 直接返回请求的文件
 }
 
 // append / to directories
