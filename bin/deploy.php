@@ -24,8 +24,8 @@ LocalPath                           <--本地路径
  */
 $ssh_remote  = "ldt_dev";
 $env  = "testing";
-$path_local  = "/data/projects/ldt/ldt_mission/";
-$path_remote = "/www/ldt_mission/";
+$path_local  = "/data/projects/ptphp/";
+$path_remote = "/data/projects/ptphp/";
 $cmd = <<<EOF
 cd $path_local
 ssh $ssh_remote "mkdir -p $path_remote";
