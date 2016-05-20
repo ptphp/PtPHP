@@ -24,8 +24,11 @@ class Model_Admin_Staff extends Model{
     static function get_sub_position_uids($user_id){
         $staff_info = self::detail_by_uid($user_id);
         if(!empty($staff_info['position_id'])){
-            $rows = self::_db()->select_rows("select u.id from et_user as u left join qjr_org_staff as s on s.mobile = u.mobile
-              left join qjr_org_position as p on p.id = s.position_id where p.superior = ?",$staff_info['position_id']);
+            $table = self::_table("org_staff");
+            $table_user = self::_table("user");
+            $table_position = self::_table("org_position");
+            $rows = self::_db()->select_rows("select u.id from $table_user as u left join $table as s on s.mobile = u.mobile
+              left join $table_position as p on p.id = s.position_id where p.superior = ?",$staff_info['position_id']);
             $res = array();
             foreach($rows as $row){
                 $res[] = $row["id"];
@@ -51,18 +54,21 @@ class Model_Admin_Staff extends Model{
         $staff = self::_db()->select_row("$sql where s.id = ?",$id);
         return $staff;
     }
+    static function table(){
+        return self::_table("org_staff");
+    }
     static function get_uid_by_staff_id($staff_id){
-        $table = self::TABLE;
+        $table = self::table();
         $row = self::_db()->select_row("select u.id from $table as s left join et_user as u on u.mobile = s.mobile where s.id = ?",$staff_id);
         return empty($row['id'])?null:$row['id'];
     }
     static function get_staff_id_by_uid($user_id){
-        $table = self::TABLE;
+        $table = self::table();
         $row = self::_db()->select_row("select s.id from $table as s left join et_user as u on u.mobile = s.mobile where u.id = ?",$user_id);
         return empty($row['id'])?null:$row['id'];
     }
     static function get_detail_sql(){
-        $table = self::TABLE;
+        $table = self::table();
         $user_table = "et_user";
         return "select
                   s.* ,s.id as `key`,s.id as staff_id,r.name as role_name,r.id as role_id,o.avatar,
@@ -125,22 +131,38 @@ class Model_Admin_Staff extends Model{
     }
     static function add($row){
         $_row = self::getSafeRow($row);
-        $id =  self::_db()->insert(self::TABLE,$_row);
+        $id =  self::_db()->insert(self::table(),$_row);
         self::_debug(array(__METHOD__,$_row,$id));
         return $id;
     }
     static function update($id,$row){
         $_row = self::getSafeRow($row);
         self::_debug(array(__METHOD__,$_row,$id));
-        self::_db()->update(self::TABLE,$_row,array("id"=>$id));
+        self::_db()->update(self::table(),$_row,array("id"=>$id));
         self::del_cache_by_staff_id($id);
         return $id;
     }
     static function remove($id){
-        self::_db()->delete(self::TABLE,array(
+        self::_db()->delete(self::table(),array(
             "id"=>$id
         ));
         self::_debug(array(__METHOD__,$id));
         self::del_cache_by_staff_id($id);
+    }
+    static function get_staff_id_by_mobile($mobile){
+        $table = self::table();
+        $row = self::_db()->row("select stf_id from $table where mobile = ?",$mobile);
+        if($row){
+            return $row['stf_id'];
+        }else{
+            return null;
+        }
+    }
+    static function get_auth_user_by_stf_id($staff_id){
+        $table_staff_user = self::_table("staff_user");
+        $table_user = self::_table("user");
+        $row = self::_db()->row("select u.user_id,u.password,u.salt from $table_user as u
+                left join $table_staff_user as su on su.user_id = u.user_id where su.stf_id = ?",$staff_id);
+        return $row;
     }
 }

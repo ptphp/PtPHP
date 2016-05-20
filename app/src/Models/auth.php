@@ -62,15 +62,30 @@ class Model_Auth extends Model{
             $username = $req['username'];
             $password = $req['password'];
         }
-
-        if($username === PtConfig::$safeLogin['username'] && $password === PtConfig::$safeLogin['password']){
-            $_SESSION['safe_logined'] = 1;
+        if(self::__check_safe_login($username,$password)){
             Model_Admin_Auth::set_login_session(-1);
+        } elseif($user_id = self::__check_admin_login($username,$password)){
+            Model_Admin_Auth::set_login_session($user_id);
         }else{
             _throw("用户和密码不正确");
         }
         return true;
     }
+    static function __check_admin_login($username,$password){
+        $res = Model_Admin_Auth::check_login($username,$password);
+        return $res;
+    }
+    static function __check_safe_login($username,$password){
+        $res = (
+            property_exists("PtConfig","safeLogin") &&
+            !empty(PtConfig::$safeLogin['username']) &&
+            !empty(PtConfig::$safeLogin['password']) &&
+            $username === PtConfig::$safeLogin['username'] &&
+            $password === PtConfig::$safeLogin['password']
+        );
+        return $res;
+    }
+
     static function gen_token($salt){
         return md5(uniqid() . mt_rand() . microtime(1) . $salt);
     }

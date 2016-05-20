@@ -48,9 +48,13 @@ class Staff extends AbstractAdmin{
         $table_department = self::_table("org_department");
         $table_role = self::_table("org_role");
         $table_position = self::_table("org_position");
+        $table_staff_user = self::_table("staff_user");
+        $table_user = self::_table("user");
         $left_join  = "left join $table_department as d on d.dep_id = s.dep_id ";
         $left_join .= "left join $table_position as p on p.pot_id = s.pot_id ";
         $left_join .= "left join $table_role as r on r.role_id = s.role_id ";
+        $left_join .= "left join $table_staff_user as su on su.stf_id = s.stf_id ";
+        $left_join .= "left join $table_user u on u.user_id = su.user_id ";
         return $left_join;
     }
     function action_list($limit,$page,$sorter,$search,$filters){
@@ -69,7 +73,7 @@ class Staff extends AbstractAdmin{
         }
         self::_debug($condition);
         $table = self::table();
-        $select_field = "s.*,s.stf_id as `key`,d.dep_name,p.pot_name,r.role_name";
+        $select_field = "s.*,u.user_id,s.stf_id as `key`,d.dep_name,p.pot_name,r.role_name";
 
         $where = 'where 1 = 1';
         $args = array();
@@ -129,14 +133,15 @@ class Staff extends AbstractAdmin{
     static function getSaveRow($row,$is_add = true){
         $row = json_decode($row,1);
         if(empty($row['stf_name'])) _throw("姓名不能为空");
-        //if(empty($row['pot_id'])) _throw("职位不能为空");
+        if(!empty($row['mobile']) && !Utils::is_mobile($row['mobile'])) _throw("手机号不合法");
 
         $_row = array(
             "stf_name"=>$row['stf_name'],
             "role_id"=>empty($row['role_id'])?null:intval($row['role_id']),
             "dep_id"=>empty($row['dep_id'])?null:intval($row['dep_id']),
             "pot_id"=>empty($row['pot_id'])?null:intval($row['pot_id']),
-            "mobile"=>empty($row['mobile'])?null:intval($row['mobile']),
+            "mobile"=>empty($row['mobile'])?null:$row['mobile'],
+            "password"=>empty($row['password'])?null:$row['password'],
             "py"=>\CUtf8_PY::encode($row['stf_name']),
         );
         return array(
@@ -146,9 +151,48 @@ class Staff extends AbstractAdmin{
     function action_update($id,$row){
         $table = self::table();
         $res = self::getSaveRow($row,false);
+        $password = null;
+
+        if(!empty($res['row']['mobile'])){
+            $mobile = $res['row']['mobile'];
+            $staff = self::_db()->row("select mobile from $table where stf_id <> ? and mobile = ?",$id,$mobile);
+            if($staff) _throw("手机号已存在");
+        }
+
+        if(!empty($res['row']['password'])){
+            $password = $res['row']['password'];
+        }
+        unset($res['row']['password']);
         self::_db()->update($table,$res['row'],array(
             "stf_id"=>$id
         ));
+
+        if($password){
+            $auth_user = \Model_Admin_Staff::get_auth_user_by_stf_id($id);
+            if($auth_user){
+                $salt = $auth_user['salt'];
+            }else{
+                $salt = \Model_Admin_Auth::gen_salt();
+            }
+            $password = \Model_Admin_Auth::gen_password($password,$salt);
+            if($auth_user){
+                $user_row = array(
+                    "password"=>$password,
+                );
+                self::_db()->update(self::_table("user"),$user_row,array("user_id"=>$auth_user['user_id']));
+            }else{
+                $user_row = array(
+                    "password"=>$password,
+                    "salt"=>$salt,
+                    "add_time"=>Utils::date_time_now(),
+                );
+                $user_id = self::_db()->insert(self::_table("user"),$user_row);
+                self::_db()->insert(self::_table("staff_user"),array(
+                    "stf_id"=>$id,
+                    "user_id"=>$user_id,
+                ));
+            }
+        }
         return array(
             "stf_id"=>$id,
             "row"=>self::get_detail($id)
@@ -157,7 +201,7 @@ class Staff extends AbstractAdmin{
     static function get_detail($id){
         $table = self::table();
         $left_join = self::get_join_sql();
-        $row = self::_db()->row("select s.*,s.stf_id as `key`,p.pot_name,d.dep_name,r.role_name from $table as s $left_join where s.stf_id = ?",$id);
+        $row = self::_db()->row("select s.*,u.user_id,s.stf_id as `key`,p.pot_name,d.dep_name,r.role_name from $table as s $left_join where s.stf_id = ?",$id);
         return $row;
     }
 
@@ -165,7 +209,34 @@ class Staff extends AbstractAdmin{
         $table = self::table();
         $res = self::getSaveRow($row);
         $res['row']['add_time'] = Utils::date_time_now();
+
+        if(!empty($res['row']['mobile'])){
+            $mobile = $res['row']['mobile'];
+            $staff = self::_db()->row("select mobile from $table where mobile = ?",$mobile);
+            if($staff) _throw("手机号已存在");
+        }
+
+        $password = null;
+        if(!empty($res['row']['password'])){
+            $password = $res['row']['password'];
+            unset($res['row']['password']);
+        }
+        unset($res['row']['password']);
         $id = self::_db()->insert($table,$res['row']);
+        if($password){
+            $salt = \Model_Admin_Auth::gen_salt();
+            $password = \Model_Admin_Auth::gen_password($password,$salt);
+            $user_row = array(
+                "password"=>$password,
+                "salt"=>$salt,
+                "add_time"=>Utils::date_time_now(),
+            );
+            $user_id = self::_db()->insert(self::_table("user"),$user_row);
+            self::_db()->insert(self::_table("staff_user"),array(
+                "stf_id"=>$id,
+                "user_id"=>$user_id,
+            ));
+        }
         return array(
             "stf_id"=>$id,
             "row"=>self::get_detail($id)
