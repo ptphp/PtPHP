@@ -166,6 +166,16 @@ const FormView = React.createClass({
                         </Form.Item>
                     </Col>
                 </Row>
+                <Row className="edit_row">
+                    <Col span="12">
+                        <Form.Item
+                            label="密码："
+                            labelCol={{ span:span_lable }}
+                            wrapperCol={{ span: span_val }}>
+                            <Input {...getFieldProps('password', {initialValue: this.getFieldValue('password')})}/>
+                        </Form.Item>
+                    </Col>
+                </Row>
             </Form>
 		);
 	}

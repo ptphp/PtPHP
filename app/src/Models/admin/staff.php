@@ -59,17 +59,19 @@ class Model_Admin_Staff extends Model{
     }
     static function get_uid_by_staff_id($staff_id){
         $table = self::table();
-        $row = self::_db()->select_row("select u.id from $table as s left join et_user as u on u.mobile = s.mobile where s.id = ?",$staff_id);
+        $table_user = self::_table("user");
+        $row = self::_db()->select_row("select u.id from $table as s left join $table_user as u on u.mobile = s.mobile where s.stf_id = ?",$staff_id);
         return empty($row['id'])?null:$row['id'];
     }
     static function get_staff_id_by_uid($user_id){
         $table = self::table();
-        $row = self::_db()->select_row("select s.id from $table as s left join et_user as u on u.mobile = s.mobile where u.id = ?",$user_id);
+        $table_user = self::_table("user");
+        $row = self::_db()->select_row("select s.stf_id from $table as s left join $table_user as u on u.mobile = s.mobile where u.user_id = ?",$user_id);
         return empty($row['id'])?null:$row['id'];
     }
     static function get_detail_sql(){
         $table = self::table();
-        $user_table = "et_user";
+        $user_table = self::_table("user");
         return "select
                   s.* ,s.id as `key`,s.id as staff_id,r.name as role_name,r.id as role_id,o.avatar,
                   o.openid,o.unionid,u.id as user_id,d.name as depart_name,p.name as position_name

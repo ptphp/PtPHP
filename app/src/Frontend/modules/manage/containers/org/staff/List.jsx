@@ -75,6 +75,20 @@ export default React.createClass({
                     width:150,
                 },
                 {
+                    title: '授权登录',
+                    key:"user_id",
+                    dataIndex: 'user_id',
+                    render: (user_id,row)=>{
+                        return(
+                            <div>{
+                                user_id ?
+                                    <Button type="primary" size="small">已授权</Button>:
+                                    <Button size="small">未授权</Button>
+                            }</div>
+                        )
+                    }
+                },
+                {
                     title: '操作',
                     key:"",
                     width:90,

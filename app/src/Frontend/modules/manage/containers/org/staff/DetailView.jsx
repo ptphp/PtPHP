@@ -60,6 +60,14 @@ export default React.createClass({
                 </Row>
                 <Row className="detail-row">
                     <Col className="detail-label" span={span_label}>
+                        授权登录:
+                    </Col>
+                    <Col className="detail-val" span={span_val}>
+                        {row.user_id ? '已授权':'未授权'}
+                    </Col>
+                </Row>
+                <Row className="detail-row">
+                    <Col className="detail-label" span={span_label}>
                         添加时间:
                     </Col>
                     <Col className="detail-val" span={span_val}>

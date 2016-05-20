@@ -46,7 +46,7 @@ export default React.createClass({
                 <Row>
                     <Col span="12">
                         <Row type="flex" justify="start">
-                            <Col span="12">
+                            <Col span="18">
                                 <Button.Group>
                                     <Button type="primary" onClick={parent.action_add}>
                                         <Icon type="plus" /> 新加
@@ -71,7 +71,7 @@ export default React.createClass({
                             </Col>
                         </Row>
                     </Col>
-                    <Col span="12">
+                    <Col span="8">
                         <Row type="flex" justify="end">
                             <Col>
 

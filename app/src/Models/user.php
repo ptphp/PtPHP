@@ -48,7 +48,7 @@ class Model_User extends Model{
      * @return array|bool|mixed
      */
     static function get_user_info($user_id){
-        $table = self::TABLE;
+        $table = self::_table("user");
         $user_info = self::get_user_info_cache($user_id);
         if(!$user_info){
             $user_info = self::_db()->select_row("select * from $table where user_id = ?",$user_id);
@@ -80,7 +80,7 @@ class Model_User extends Model{
      */
     static function set_user_info_cache($user_id,$user_info = array()){
         if(empty($user_info)){
-            $table = self::TABLE;
+            $table = self::_table("user");
             $user_info = self::_db()->select_row("select * from $table where user_id = ?",$user_id);
         }
         self::_redis()->set(self::CACHE_MOBILE_KEY.$user_info['mobile'],$user_id);
@@ -131,7 +131,8 @@ class Model_User extends Model{
             "password_encrypt"=>self::password_encrypt($password),
             "addtime"=>time()
         );
-        $user_id = self::_db()->insert(self::TABLE,$user_info);
+        $table = self::_table("user");
+        $user_id = self::_db()->insert($table,$user_info);
         $user_info['user_id'] = $user_id;
         self::set_user_info_cache($user_id,$user_info);
         return $user_info;
@@ -143,7 +144,7 @@ class Model_User extends Model{
      * @return bool
      */
     static function check_user_exsits($username){
-        $table = self::TABLE;
+        $table = self::_table("user");
         $is_mobile = Utils::is_mobile($username);
         $key = ($is_mobile ? self::CACHE_MOBILE_KEY : self::CACHE_USERNAME_KEY);
         $cache_user_id = self::_redis()->get($key.$username);
@@ -196,7 +197,8 @@ class Model_User extends Model{
             if(!$user_id){
                 $user_info = self::create_new_user($mobile,$password,$mobile,"N",$passport_uid);
             }else{
-                self::_db()->update(self::TABLE,array(
+                $table = self::_table("user");
+                self::_db()->update($table,array(
                     "password"=>self::gen_password($passport_password),
                     "password_encrypt"=>self::password_encrypt($passport_password)
                 ),array(
@@ -307,7 +309,7 @@ class Model_User extends Model{
     }
 
     static function action_list($limit = 10){
-        $table = self::TABLE;
+        $table = self::_table("user");
         $rows = self::_db()->select_rows("select * from $table order by user_id  desc limit $limit");
         $count = self::_db()->select_row("select count(*) as total from $table order by user_id desc");
         return array(

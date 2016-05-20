@@ -35,7 +35,7 @@ class Model_Auth extends Model{
     }
     static function do_login($username,$passowrd){
         if(strlen($passowrd) < 6) _throw("密码少于6位");
-        $table = "et_user";
+        $table = self::_table("user");
         $row = self::_db()->select_row("select id,password from $table where mobile = ?",$username);
         if(!$row) _throw("用户不存在");
         $passowrd = md5(sha1($passowrd));
