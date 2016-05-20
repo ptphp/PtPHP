@@ -14,6 +14,7 @@
         <!-- MySQL -->
         <env name="TESTS_ENV" value="true" />
         <server name="HTTP_HOST" value="ptphp.com"/>
+        <server name="APPLICATION_ENV" value="development"/>
         <const name="COOKIE_FILE" value="/tmp/ptphp.cookie" />
     </php>
 

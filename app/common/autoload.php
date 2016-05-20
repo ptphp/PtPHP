@@ -1,5 +1,4 @@
 <?php
-
 function pt_autoload($class)
 {
 

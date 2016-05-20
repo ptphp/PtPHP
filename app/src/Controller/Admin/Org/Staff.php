@@ -23,16 +23,22 @@ class Staff extends AbstractAdmin{
      */
     function action_remove($id,$ids){
         $table = self::table();
+        $table_staff_user =self::_table("staff_user");
         if($id){
-            $row = self::_db()->row("select * from $table stf_id = ?",$id);
+            $row = self::_db()->row("select * from $table where stf_id = ?",$id);
             if(!$row) _throw("记录不存在");
             self::_db()->delete($table,array(
-                "id"=>$id
+                "stf_id"=>$id
+            ));
+            self::_db()->delete($table_staff_user,array(
+                "stf_id"=>$id
             ));
         }
         if($ids){
             $ids = handle_mysql_in_ids($ids);
             self::_db()->run_sql("delete from $table where stf_id in ($ids)");
+            self::_db()->run_sql("delete from $table_staff_user where stf_id in ($ids)");
+
         }
         return array("msg"=>"删除成功");
     }
@@ -167,14 +173,16 @@ class Staff extends AbstractAdmin{
             "stf_id"=>$id
         ));
 
-        if($password){
-            $auth_user = \Model_Admin_Staff::get_auth_user_by_stf_id($id);
+        $auth_user = \Model_Admin_Staff::get_auth_user_by_stf_id($id);
+        if($password){//修改密码
             if($auth_user){
                 $salt = $auth_user['salt'];
             }else{
                 $salt = \Model_Admin_Auth::gen_salt();
             }
+            //生成密码
             $password = \Model_Admin_Auth::gen_password($password,$salt);
+
             if($auth_user){
                 $user_row = array(
                     "password"=>$password,
@@ -201,6 +209,15 @@ class Staff extends AbstractAdmin{
                 ));
             }
         }
+
+        //修改登陆手机号
+        if($auth_user && !empty($res['row']['mobile'])){
+            $mobile = $res['row']['mobile'];
+            self::_db()->update(self::_table("user"),array(
+                "mobile"=>$mobile
+            ),array("user_id"=>$auth_user['user_id']));
+        }
+
         return array(
             "stf_id"=>$id,
             "row"=>self::get_detail($id)
