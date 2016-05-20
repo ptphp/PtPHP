@@ -20,35 +20,24 @@ const FormView = React.createClass({
         const { getFieldProps } = this.props.form;
         let span_lable = 4;
         let span_val = 20;
+        console.log(this.getFieldValue('pid'));
         return (
             <Form horizontal className="edit_main">
                 <Row className="edit_row">
-                    <Col span="12">
+                    <Col span="12" style={{display:"none"}}>
                         <Form.Item
-                            label="Key："
+                            label="："
                             labelCol={{ span:span_lable }}
                             wrapperCol={{ span: span_val }}>
-                            <Input {...getFieldProps('set_key', {initialValue: this.getFieldValue('set_key')})}/>
+                            <Input {...getFieldProps('cat_pid', {initialValue: this.getFieldValue('pid')})}/>
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row className="edit_row">
                     <Col span="12">
                         <Form.Item
-                            label="Title："
+                            label="分类名："
                             labelCol={{ span:span_lable }}
                             wrapperCol={{ span: span_val }}>
-                            <Input {...getFieldProps('set_title', {initialValue: this.getFieldValue('set_title')})}/>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row className="edit_row">
-                    <Col span="12">
-                        <Form.Item
-                            label="Value："
-                            labelCol={{ span:span_lable }}
-                            wrapperCol={{ span: span_val }}>
-                            <Input type="textarea" rows="4"  {...getFieldProps('set_value', {initialValue: this.getFieldValue('set_value')})}/>
+                            <Input {...getFieldProps('cat_name', {initialValue: this.getFieldValue('cat_name')})}/>
                         </Form.Item>
                     </Col>
                 </Row>

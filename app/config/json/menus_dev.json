@@ -12,31 +12,12 @@
     },
     {
         "key":"/mission",
-        "title":"赚绿电",
+        "title":"任务奖励",
         "icon":"pay-circle",
         "sub":[
             {
                 "title":"任务管理",
                 "key":"/mission/list"
-            }
-        ]
-    },
-    {
-        "key":"/solardian",
-        "title":"绿电中心",
-        "icon":"windows",
-        "sub":[
-            {
-                "title":"缴费订单",
-                "key":"/solardian/order"
-            },
-            {
-                "title":"绿电套餐",
-                "key":"/solardian/package"
-            },
-            {
-                "title":"缴费接口",
-                "key":"/solardian/api"
             }
         ]
     },

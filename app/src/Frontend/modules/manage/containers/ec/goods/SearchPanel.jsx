@@ -53,19 +53,19 @@ export default Form.create()(React.createClass({
     },
     componentDidMount(){},
     render() {
-        const { getFieldProps } = this.props.form;
-        //let {roles} = this.props.parent.state;
-        let roles = [];
+        const { getFieldProps,departments } = this.props.form;
+        let {roles} = this.props.parent.state;
+
         return (
             <div style={{marginBottom: 16}}>
                 <Form horizontal className="advanced-search-form" key="more">
                     <Row>
                         <Col span="8">
                             <Form.Item
-                                label="Key："
+                                label="商品名："
                                 labelCol={{ span: 5 }}
                                 wrapperCol={{ span: 19 }}>
-                                <Input placeholder="请输入" {...getFieldProps('set_key')}/>
+                                <Input placeholder="请输入" {...getFieldProps('god_name')}/>
                             </Form.Item>
                         </Col>
                     </Row>

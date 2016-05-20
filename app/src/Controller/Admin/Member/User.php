@@ -2,81 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: joseph
- * Date: 16/3/23
- * Time: 下午5:00
+ * Date: 16/1/19
+ * Time: 下午2:53
  */
-namespace Controller\Admin\System;
+namespace Controller\Admin\Member;
 use Controller\Admin\AbstractAdmin as AbstractAdmin;
+
 use PtPHP\Model as Model;
-use Model_Admin_Auth;
-use PtConfig;
-use Model_Admin_Permission;
-class Setting extends AbstractAdmin{
-    function action_menu(){
-        return $this->get_menu();
-    }
-    function get_menu(){
-        $menu_path = PATH_APP."/config/json/menus.json";
-        if(self::is_development()){
-            $menu_path = PATH_APP."/config/json/menus_dev.json";
-        }
-        if(!is_file($menu_path)) _throw("not found menus.json");
-        $menus = json_decode(file_get_contents($menu_path),1);
-        if(Model_Admin_Auth::get_user_id() == -1) return $menus;
-        $_menus = array();
-        foreach($menus as &$menu){
-            if(Model_Admin_Permission::check($menu['title'])){
-                if(!empty($menu['sub'])){
-                    $sub = array();
-                    foreach($menu['sub'] as &$sub_menu){
-                        if(Model_Admin_Permission::check($menu['title']."/".$sub_menu['title'])){
-                            $sub[] = $sub_menu;
-                        }
-                    }
-                    if(!empty($sub)) $menu['sub'] = $sub;
-                    if(!empty($sub)) $_menus[] = $menu;
-                }else{
-                    $_menus[] = $menu;
-                }
-            }
-        }
-        return $_menus;
-    }
-    /**
-     * 获取所有项
-     * @api_url?controller=admin/system/setting&action=info
-     * @return array
-     */
-    function action_info(){
-        $user_id = Model_Admin_Auth::get_user_id();
-        $is_super_admin = $user_id == -1;
+use PtPHP\Utils as Utils;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
-        $info = array(
-            "site_title"=>PtConfig::$siteAdminTitle,
-            "menus"=>$this->get_menu(),
-            "interval"=>intval(22000)
-        );
-        $res = array(
-            "setting"=>$info,
-            "permissions"=>array(),
-            "is_super_admin"=> $is_super_admin,
-        );
-        //self::_debug($res);
-        return $res;
-    }
-
+class User extends AbstractAdmin{
     static function table(){
-        return self::_table("sys_setting");
+        return self::_table("user");
     }
-    static function table_alias(){
-        return "s";
-    }
-
     static function pk(){
-        return "set_id";
+        return "user_id";
     }
-
-
     /**
      * 删除
      * @param $id
@@ -95,7 +37,9 @@ class Setting extends AbstractAdmin{
         }
         if($ids){
             $ids = handle_mysql_in_ids($ids);
+            $table_staff_user = self::_table("staff_user");
             self::_db()->run_sql("delete from $table where $pk in ($ids)");
+            self::_db()->run_sql("delete from $table_staff_user where $pk in ($ids)");
         }
         return array("msg"=>"删除成功");
     }
@@ -103,23 +47,33 @@ class Setting extends AbstractAdmin{
     function action_row($id){
         $pk = self::pk();
         $table = self::table();
-        $table_alias = self::table_alias();
         $left_join = self::get_join_sql();
-        $row = self::_db()->row("select {$table_alias}.*,{$table_alias}.{$pk} as `key` from $table as s $left_join where {$table_alias}.{$pk} = ?",$id);
+        $table_alias = "u";
+        $row = self::_db()->row("select u.*,{$table_alias}.{$pk} as `key`,s.mobile as staff_mobile,i.*,f.* from $table as u $left_join where u.{$pk} = ?",$id);
+        $row['password'] = "";
         return array(
             "row"=>$row
         );
     }
 
     static function get_join_sql(){
-        $left_join  = "";
+        $table_staff = self::_table("org_staff");
+        $table_staff_user = self::_table("staff_user");
+        $talbe_user_info = self::_table("user_info");
+        $talbe_user_fund = self::_table("user_fund");
+
+        $left_join  = "left join $table_staff_user as su on su.user_id = u.user_id ";
+        $left_join  .= "left join $table_staff as s on s.stf_id = su.stf_id ";
+        $left_join  .= "left join $talbe_user_info as i on i.user_id = u.user_id ";
+        $left_join  .= "left join $talbe_user_fund as f on f.user_id = u.user_id ";
         return $left_join;
     }
+
     function action_list($limit,$page,$sorter,$search,$filters){
         $pk = self::pk();
-        $table_alias = self::table_alias();
+        $table_alias = "u";
         $table = self::table();
-        $select_field = "{$table_alias}.*,{$table_alias}.{$pk} as `key`";
+        $select_field = "{$table_alias}.*,{$table_alias}.{$pk} as `key`,s.mobile as staff_mobile,i.*,f.*";
 
         $limit = empty($limit) ? 10 : intval($limit);
         $page  = empty($page)  ? 1  : intval($page);
@@ -138,15 +92,17 @@ class Setting extends AbstractAdmin{
 
         $where = 'where 1 = 1';
         $args = array();
-//        if(!empty($condition['mobile'])){
-//            $where .= " and {$table_alias}.mobile like ?";
-//            $args[] = "%".$condition['mobile'];
-//        }
-        if(!empty($condition['set_key'])){
-            $where .= " and {$table_alias}.set_key like ?";
-            $args[] = "%".$condition['set_key']."%";
+        if(!empty($condition['mobile'])){
+            $where .= " and ({$table_alias}.mobile like ? or s.mobile like ?) ";
+            $args[] = "%".$condition['mobile']."%";
+            $args[] = "%".$condition['mobile']."%";
         }
-        $count_res = self::_db()->select_row("SELECT COUNT({$table_alias}.{$pk}) AS total FROM $table as {$table_alias} $where",$args);
+        if(!empty($condition['user_id'])){
+            $where .= " and {$table_alias}.user_id = ?";
+            $args[] = $condition['user_id'];
+        }
+        $left_join = self::get_join_sql();
+        $count_res = self::_db()->select_row("SELECT COUNT({$table_alias}.{$pk}) AS total FROM $table as {$table_alias} $left_join $where",$args);
         $records = $count_res['total'];
         $total_pages = $records > 0  ? ceil($records/$limit) : 1;
         $skip = ($page - 1) * $limit;
@@ -157,11 +113,12 @@ class Setting extends AbstractAdmin{
         $sort_field = !empty($sorter['field']) && in_array($sorter['field'],$sorter_field_tpl) ? $sorter['field']  : $table_alias.".".$pk;
         $sort_order = !empty($sorter['order']) && !empty($sorter_order_tpl[$sorter['order']]) ? $sorter_order_tpl[$sorter['order']]:"desc";
         $order  = "ORDER BY $sort_field $sort_order";
-        $left_join = self::get_join_sql();
         $sql = "SELECT $select_field FROM $table as {$table_alias} $left_join $where $order LIMIT $skip,$limit ";
         self::_debug(array($sql,$args));
         $rows = self::_db()->rows($sql,$args);
-
+        foreach($rows as &$row){
+            $row['password'] = "";
+        }
         $res = array(
             "total"=>$records,
             "page"=>$page,
@@ -183,12 +140,9 @@ class Setting extends AbstractAdmin{
     }
     static function getSaveRow($row,$is_add = true){
         $row = json_decode($row,1);
-        if(empty($row['set_key'])) _throw("key不能为空");
-
         $_row = array(
-            "set_key"=>self::getSaveRowValue($row,"set_key",""),
-            "set_title"=>self::getSaveRowValue($row,"set_title",""),
-            "set_value"=>self::getSaveRowValue($row,"set_value",""),
+            "mobile"=>self::getSaveRowValue($row,"mobile",""),
+            "password"=>self::getSaveRowValue($row,"password",""),
         );
 
         return array(
@@ -199,6 +153,23 @@ class Setting extends AbstractAdmin{
         $res = self::getSaveRow($row,false);
         $table = self::table();
         $pk = self::pk();
+
+        if(!Utils::is_mobile($res['row']['mobile'])){
+            _throw("手机号不合法");
+        }
+
+        $user_mobile = self::_db()->row("select mobile from $table where user_id <> ?  and mobile = ?",$id,$res['row']['mobile']);
+        if($user_mobile){
+            _throw("手机号已存在");
+        }
+        if(!empty($res['row']['password'])){
+            $password = $res['row']['password'];
+            $row = self::_db()->row("select salt from $table where user_id = ?",$id);
+            $salt = $row['salt'];
+            $res['row']['password'] = \Model_Admin_Auth::gen_password($password,$salt);
+        }else{
+            unset($res['row']['password']);
+        }
 
         self::_db()->update($table,$res['row'],array(
             $pk=>$id
@@ -212,6 +183,24 @@ class Setting extends AbstractAdmin{
         $res = self::getSaveRow($row);
         $table = self::table();
         $pk = self::pk();
+        $res['row']['add_time'] = Utils::date_time_now();
+
+        if(!Utils::is_mobile($res['row']['mobile'])){
+            _throw("手机号不合法");
+        }
+
+        $user_mobile = self::_db()->row("select mobile from $table where mobile = ?",$res['row']['mobile']);
+        if($user_mobile){
+            _throw("手机号已存在");
+        }
+        if(!empty($res['row']['password'])){
+            $password = $res['row']['password'];
+            $salt = \Model_Admin_Auth::gen_salt();
+            $res['row']['password'] = \Model_Admin_Auth::gen_password($password,$salt);
+            $res['row']['salt'] = $salt;
+        }else{
+            _throw("密码不能为空");
+        }
         $id = self::_db()->insert($table,$res['row']);
         $res = $this->action_row($id);
         $res[$pk] = $id;

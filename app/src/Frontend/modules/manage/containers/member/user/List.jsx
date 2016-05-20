@@ -32,15 +32,21 @@ export default React.createClass({
             loading_action_remove:false,
             columns:[
                 {
-                    title: 'ID',
+                    title: 'UID',
                     key:"key",
                     dataIndex: 'key',
                     width:60
                 },
                 {
-                    title: '地区名',
-                    key:"area_name",
-                    dataIndex: 'area_name'
+                    title: '手机号',
+                    key:"mobile",
+                    dataIndex: 'mobile'
+                },
+                {
+                    title: '添加时间',
+                    key:"add_time",
+                    dataIndex: 'add_time',
+                    width:150
                 },
                 {
                     title: '操作',

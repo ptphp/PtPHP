@@ -86,6 +86,12 @@ import {
 } from './containers/system/index';
 
 
+import {
+    EcView,
+    EcCategoryListView,
+    EcGoodsListView,
+    EcOrderListView
+} from './containers/ec/index';
 window.Utils = require("../../utils");
 const NotFound = React.createClass({render () {return <h1>404 Not Found</h1>;}});
 const requireLogin = (nextState, replace, cb) => {cb();};
@@ -116,6 +122,11 @@ const AppRoutes = (
                 </Route>
                 <Route path="dict" breadcrumbName="字典" component={DictView}>
                     <Route path="area" breadcrumbName="地区" component={DictAreaListView}/>
+                </Route>
+                <Route path="ec" breadcrumbName="商城" component={EcView}>
+                    <Route path="category" breadcrumbName="商品分类" component={EcCategoryListView}/>
+                    <Route path="goods" breadcrumbName="商品管理" component={EcGoodsListView}/>
+                    <Route path="order" breadcrumbName="订单管理" component={EcOrderListView}/>
                 </Route>
                 <Route path="express" breadcrumbName="快递仓管" component={ExpressView}>
                     <Route path="order" breadcrumbName="寄件订单" component={ExpressOrderListView}/>
@@ -161,7 +172,7 @@ const AppRoutes = (
                 </Route>
                 <Route path="system" breadcrumbName="系统" component={SystemView}>
                     <Route path="setting" breadcrumbName="系统设置" component={SystemSettingListView}/>
-                    <Route path="log" breadcrumbName="操作日志" component={SystemSettingListView}/>
+                    <Route path="log" breadcrumbName="操作日志" component={SystemLogListView}/>
                 </Route>
             </Route>
         </Route>

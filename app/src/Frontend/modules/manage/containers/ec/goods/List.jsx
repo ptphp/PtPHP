@@ -5,7 +5,10 @@ import { Row,Col,Menu,Dropdown,Tooltip,message,Table,Popconfirm ,Icon , Button} 
 import RowOptItemBox from '../../../components/widget/RowOptItemBox.jsx';
 import RowBox        from '../../../components/widget/RowBox.jsx';
 import ListBox       from '../../../components/widget/ListBox.jsx';
-import SearchPanel   from './SearchPanel.jsx';
+import SearchPanel  from './SearchPanel.jsx';
+
+import DetailView    from './DetailView.jsx';
+import FormView      from './FormView.jsx';
 
 import config from './config';
 import './index.less';
@@ -36,48 +39,44 @@ export default React.createClass({
                     width:60
                 },
                 {
-                    title: 'Uid',
-                    key:"user_id",
-                    dataIndex: 'user_id',
-                    width:90
+                    title: '商品名',
+                    key:"god_name",
+                    dataIndex: 'god_name'
                 },
                 {
-                    title: '进/出帐',
-                    key:"bil_type",
-                    dataIndex: 'bil_type'
+                    title: '分类',
+                    key:"cat_name",
+                    dataIndex: 'cat_name',
+                    width:120,
                 },
                 {
-                    title: '类型',
-                    key:"bil_kind",
-                    dataIndex: 'bil_kind'
-                },
-                {
-                    title: '金额',
-                    key:"bil_amount",
-                    dataIndex: 'bil_kind'
-                },
-
-                {
-                    title: '备注',
-                    key:"bil_note",
-                    dataIndex: 'bil_note'
-                },
-
-                {
-                    title: '交易时间',
+                    title: '添加时间',
                     key:"add_time",
-                    dataIndex: 'add_time'
+                    dataIndex: 'add_time',
+                    width:150,
+                },
+                {
+                    title: '操作',
+                    key:"",
+                    width:90,
+                    dataIndex: '',
+                    render: (value,row)=>{
+                        return <RowOptItemBox actions={[
+                        {title:"查看",icon:"book"},
+                        {title:"修改",icon:"edit"}]} option_action={this.option_action.bind(this,row)}/>;
+                    }
                 }
-
             ],
+            cats:[],
+            selectedCatId:null,
         };
     },
     option_action(row,e){
         if(e.key == "修改"){
             this.action_update(row)
         }
-        if(e.key == "权限"){
-            this.action_show_permission_pannel(row)
+        if(e.key == "查看"){
+            this.action_detail(row)
         }
     },
     action_remove(){
@@ -100,14 +99,17 @@ export default React.createClass({
         console.log("修改",row)
         this.setState({
             selectedRow:row,
-            showUpdateView:true
+            showUpdateView:true,
+            selectedCatId:row.cat_id,
         });
     },
     action_add(){
         console.log("新加")
         this.setState({
             selectedRow:null,
-            showAddView:true
+            showAddView:true,
+
+            selectedCatId:null,
         });
     },
     action_detail(row){
@@ -126,6 +128,7 @@ export default React.createClass({
         if(selectedRow && selectedRow.key){
             rowKey = data.id = selectedRow.key;
         }
+        row.cat_id = this.state.selectedCatId;
         data.row = JSON.stringify(row);
         let action = selectedRow ? "update":"add";
         this.setState({
@@ -138,25 +141,17 @@ export default React.createClass({
                 });
                 return message.error(result);
             }else{
-                let {rows} = this.state;
-                selectedRow = result.row;
                 if(rowKey){
-                    rows.forEach(_row=>{
-                        if(_row.key == rowKey){
-                            Object.assign(_row,row)
-                        }
-                    });
                     message.success("修改成功");
                 }else{
                     message.success("新加成功");
-                    rows.unshift(result.row);
                 }
-
                 this.setState({
-                    rows,
-                    selectedRow,
-                    loading_action_save:false
+                    loading_action_save:false,
+                    showAddView:false,
+                    showUpdateView:false
                 });
+                this.action_list();
             }
 
         });
@@ -169,12 +164,13 @@ export default React.createClass({
                 this.setState({loading: false});
             }else{
                 let { pagination } = this.state;
-                let {rows,total,limit,page} = result;
+                let {rows,total,limit,page,cats} = result;
                 pagination.total = total;
                 pagination.pageSize = limit;
                 pagination.current = page;
                 if(this.isMounted()){
                     this.setState({
+                        cats,
                         loading: false,selectedRowKeys:[],
                         pagination,rows
                     });
@@ -189,7 +185,7 @@ export default React.createClass({
         return (
             <div>
                 <SearchPanel parent={this} ref="search"/>
-                <ListBox hideAddBtn parent={this} ref="listTable"/>
+                <ListBox parent={this} ref="listTable"/>
             </div>
         );
     },
@@ -219,15 +215,6 @@ export default React.createClass({
             </RowBox>
         );
     },
-    renderPermission(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showPermissionView:false})}}
-                    action_save={this.action_save_permission}>
-                <PermissionView ref="form" parent={this}/>
-            </RowBox>
-        );
-    },
 	render() {
         let result = null;
         let hideList = {};
@@ -252,6 +239,6 @@ export default React.createClass({
                     {this.renderList()}
                 </div>
             </div>
-		);
+        );
 	}
 });

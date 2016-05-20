@@ -4,8 +4,11 @@ import { Row,Col,Menu,Dropdown,Tooltip,message,Table,Popconfirm ,Icon , Button} 
 
 import RowOptItemBox from '../../../components/widget/RowOptItemBox.jsx';
 import RowBox        from '../../../components/widget/RowBox.jsx';
-import ListBox       from '../../../components/widget/ListBox.jsx';
-import SearchPanel   from './SearchPanel.jsx';
+import ListBox       from './ListBox.jsx';
+import SearchPanel  from './SearchPanel.jsx';
+
+import DetailView    from './DetailView.jsx';
+import FormView      from './FormView.jsx';
 
 import config from './config';
 import './index.less';
@@ -36,48 +39,45 @@ export default React.createClass({
                     width:60
                 },
                 {
-                    title: 'Uid',
-                    key:"user_id",
-                    dataIndex: 'user_id',
-                    width:90
+                    title: '订单号',
+                    key:"orderno",
+                    dataIndex: 'orderno',
+                    width:150
                 },
                 {
-                    title: '进/出帐',
-                    key:"bil_type",
-                    dataIndex: 'bil_type'
+                    title: '订单描述',
+                    key:"subject",
+                    dataIndex: 'subject'
                 },
                 {
-                    title: '类型',
-                    key:"bil_kind",
-                    dataIndex: 'bil_kind'
-                },
-                {
-                    title: '金额',
-                    key:"bil_amount",
-                    dataIndex: 'bil_kind'
-                },
-
-                {
-                    title: '备注',
-                    key:"bil_note",
-                    dataIndex: 'bil_note'
-                },
-
-                {
-                    title: '交易时间',
+                    title: '添加时间',
                     key:"add_time",
-                    dataIndex: 'add_time'
+                    dataIndex: 'add_time',
+                    width:150,
+                },
+                {
+                    title: '操作',
+                    key:"",
+                    width:90,
+                    dataIndex: '',
+                    render: (value,row)=>{
+                        return <RowOptItemBox actions={[
+                        {title:"查看",icon:"book"}]} option_action={this.option_action.bind(this,row)}/>;
+                    }
                 }
-
             ],
+            departments:[],
+            roles:[],
+            selectedDepId:null,
+            selectedPotId:null,
         };
     },
     option_action(row,e){
         if(e.key == "修改"){
             this.action_update(row)
         }
-        if(e.key == "权限"){
-            this.action_show_permission_pannel(row)
+        if(e.key == "查看"){
+            this.action_detail(row)
         }
     },
     action_remove(){
@@ -98,17 +98,17 @@ export default React.createClass({
     },
     action_update(row){
         console.log("修改",row)
-        this.setState({
-            selectedRow:row,
-            showUpdateView:true
-        });
+        //this.setState({
+        //    selectedRow:row,
+        //    showUpdateView:true
+        //});
     },
     action_add(){
         console.log("新加")
-        this.setState({
-            selectedRow:null,
-            showAddView:true
-        });
+        //this.setState({
+        //    selectedRow:null,
+        //    showAddView:true,
+        //});
     },
     action_detail(row){
         console.log("查看",row)
@@ -118,48 +118,7 @@ export default React.createClass({
         });
     },
     action_save(){
-        var row = this.refs.form.getFieldsValue();
-        let data = {};
-        var {selectedRow} = this.state;
-        var rowKey = null;
-        console.log("保存",selectedRow,row)
-        if(selectedRow && selectedRow.key){
-            rowKey = data.id = selectedRow.key;
-        }
-        data.row = JSON.stringify(row);
-        let action = selectedRow ? "update":"add";
-        this.setState({
-            loading_action_save:true
-        });
-        this.context.dataStore.actionPost(config.controller,action,data,(result,error)=>{
-            if(error){
-                this.setState({
-                    loading_action_save:false
-                });
-                return message.error(result);
-            }else{
-                let {rows} = this.state;
-                selectedRow = result.row;
-                if(rowKey){
-                    rows.forEach(_row=>{
-                        if(_row.key == rowKey){
-                            Object.assign(_row,row)
-                        }
-                    });
-                    message.success("修改成功");
-                }else{
-                    message.success("新加成功");
-                    rows.unshift(result.row);
-                }
 
-                this.setState({
-                    rows,
-                    selectedRow,
-                    loading_action_save:false
-                });
-            }
-
-        });
     },
     action_list(params = {}) {
         console.log("列表",params)
@@ -189,7 +148,7 @@ export default React.createClass({
         return (
             <div>
                 <SearchPanel parent={this} ref="search"/>
-                <ListBox hideAddBtn parent={this} ref="listTable"/>
+                <ListBox parent={this} ref="listTable"/>
             </div>
         );
     },
@@ -219,15 +178,6 @@ export default React.createClass({
             </RowBox>
         );
     },
-    renderPermission(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showPermissionView:false})}}
-                    action_save={this.action_save_permission}>
-                <PermissionView ref="form" parent={this}/>
-            </RowBox>
-        );
-    },
 	render() {
         let result = null;
         let hideList = {};
@@ -252,6 +202,6 @@ export default React.createClass({
                     {this.renderList()}
                 </div>
             </div>
-		);
+        );
 	}
 });

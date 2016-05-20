@@ -1,3 +1,3 @@
 module.exports = {
-    controller:"admin/dict/area",
+    controller:"admin/member/bill",
 };

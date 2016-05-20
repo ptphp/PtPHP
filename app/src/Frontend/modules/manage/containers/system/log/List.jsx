@@ -7,8 +7,6 @@ import RowBox        from '../../../components/widget/RowBox.jsx';
 import ListBox       from '../../../components/widget/ListBox.jsx';
 import SearchPanel   from './SearchPanel.jsx';
 
-import FormView      from './FormView.jsx';
-
 import config from './config';
 import './index.less';
 
@@ -38,29 +36,38 @@ export default React.createClass({
                     width:60
                 },
                 {
-                    title: '地区名',
-                    key:"area_name",
-                    dataIndex: 'area_name'
+                    title: 'Uid',
+                    key:"user_id",
+                    dataIndex: 'user_id',
+                    width:90
                 },
                 {
-                    title: '操作',
-                    key:"",
-                    width:90,
-                    dataIndex: '',
-                    render: (value,row)=>{
-                        return <RowOptItemBox actions={[
-                        {title:"修改",icon:"edit"}]} option_action={this.option_action.bind(this,row)}/>;
-                    }
+                    title: '内容',
+                    key:"content",
+                    dataIndex: 'content'
+                },
+                {
+                    title: '模块',
+                    key:"method",
+                    dataIndex: 'method'
+                },
+                {
+                    title: '时间',
+                    key:"add_time",
+                    dataIndex: 'add_time'
+                },
+                {
+                    title: 'IP',
+                    key:"ip",
+                    dataIndex: 'ip'
                 }
+
             ],
         };
     },
     option_action(row,e){
         if(e.key == "修改"){
             this.action_update(row)
-        }
-        if(e.key == "权限"){
-            this.action_show_permission_pannel(row)
         }
     },
     action_remove(){
@@ -172,56 +179,15 @@ export default React.createClass({
         return (
             <div>
                 <SearchPanel parent={this} ref="search"/>
-                <ListBox parent={this} ref="listTable"/>
+                <ListBox hideAddBtn parent={this} ref="listTable"/>
             </div>
         );
     },
-    renderDetail(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showDetailView:false})}}>
-                <DetailView parent={this}/>
-            </RowBox>
-        );
-    },
-    renderAdd(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showAddView:false})}}
-                    action_save={this.action_save}>
-                <FormView ref="form" parent={this}/>
-            </RowBox>
-        );
-    },
-    renderUpdate(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showUpdateView:false})}}
-                    action_save={this.action_save}>
-                <FormView ref="form" parent={this}/>
-            </RowBox>
-        );
-    },
-    renderPermission(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showPermissionView:false})}}
-                    action_save={this.action_save_permission}>
-                <PermissionView ref="form" parent={this}/>
-            </RowBox>
-        );
-    },
-	render() {
+    render() {
         let result = null;
         let hideList = {};
         let hideUnList = {display:"none"};
-        if(this.state.showAddView) {
-            result = this.renderAdd()
-        }else if(this.state.showDetailView){
-            result = this.renderDetail()
-        }else if(this.state.showUpdateView){
-            result = this.renderUpdate()
-        }
+
         if(result){
             hideList = {display:"none"};
             hideUnList = {};
@@ -235,6 +201,6 @@ export default React.createClass({
                     {this.renderList()}
                 </div>
             </div>
-		);
-	}
+        );
+    }
 });

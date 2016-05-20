@@ -11,69 +11,16 @@ use PtPHP\Model as Model;
 use Model_Admin_Auth;
 use PtConfig;
 use Model_Admin_Permission;
-class Setting extends AbstractAdmin{
-    function action_menu(){
-        return $this->get_menu();
-    }
-    function get_menu(){
-        $menu_path = PATH_APP."/config/json/menus.json";
-        if(self::is_development()){
-            $menu_path = PATH_APP."/config/json/menus_dev.json";
-        }
-        if(!is_file($menu_path)) _throw("not found menus.json");
-        $menus = json_decode(file_get_contents($menu_path),1);
-        if(Model_Admin_Auth::get_user_id() == -1) return $menus;
-        $_menus = array();
-        foreach($menus as &$menu){
-            if(Model_Admin_Permission::check($menu['title'])){
-                if(!empty($menu['sub'])){
-                    $sub = array();
-                    foreach($menu['sub'] as &$sub_menu){
-                        if(Model_Admin_Permission::check($menu['title']."/".$sub_menu['title'])){
-                            $sub[] = $sub_menu;
-                        }
-                    }
-                    if(!empty($sub)) $menu['sub'] = $sub;
-                    if(!empty($sub)) $_menus[] = $menu;
-                }else{
-                    $_menus[] = $menu;
-                }
-            }
-        }
-        return $_menus;
-    }
-    /**
-     * 获取所有项
-     * @api_url?controller=admin/system/setting&action=info
-     * @return array
-     */
-    function action_info(){
-        $user_id = Model_Admin_Auth::get_user_id();
-        $is_super_admin = $user_id == -1;
+use PtPHP\Utils;
 
-        $info = array(
-            "site_title"=>PtConfig::$siteAdminTitle,
-            "menus"=>$this->get_menu(),
-            "interval"=>intval(22000)
-        );
-        $res = array(
-            "setting"=>$info,
-            "permissions"=>array(),
-            "is_super_admin"=> $is_super_admin,
-        );
-        //self::_debug($res);
-        return $res;
-    }
+class Log extends AbstractAdmin{
 
     static function table(){
-        return self::_table("sys_setting");
-    }
-    static function table_alias(){
-        return "s";
+        return self::_table("sys_log");
     }
 
     static function pk(){
-        return "set_id";
+        return "log_id";
     }
 
 
@@ -103,9 +50,8 @@ class Setting extends AbstractAdmin{
     function action_row($id){
         $pk = self::pk();
         $table = self::table();
-        $table_alias = self::table_alias();
         $left_join = self::get_join_sql();
-        $row = self::_db()->row("select {$table_alias}.*,{$table_alias}.{$pk} as `key` from $table as s $left_join where {$table_alias}.{$pk} = ?",$id);
+        $row = self::_db()->row("select b.* from $table as l $left_join where l.{$pk} = ?",$id);
         return array(
             "row"=>$row
         );
@@ -117,7 +63,7 @@ class Setting extends AbstractAdmin{
     }
     function action_list($limit,$page,$sorter,$search,$filters){
         $pk = self::pk();
-        $table_alias = self::table_alias();
+        $table_alias = "l";
         $table = self::table();
         $select_field = "{$table_alias}.*,{$table_alias}.{$pk} as `key`";
 
@@ -142,9 +88,9 @@ class Setting extends AbstractAdmin{
 //            $where .= " and {$table_alias}.mobile like ?";
 //            $args[] = "%".$condition['mobile'];
 //        }
-        if(!empty($condition['set_key'])){
-            $where .= " and {$table_alias}.set_key like ?";
-            $args[] = "%".$condition['set_key']."%";
+        if(!empty($condition['user_id'])){
+            $where .= " and {$table_alias}.user_id = ?";
+            $args[] = $condition['user_id'];
         }
         $count_res = self::_db()->select_row("SELECT COUNT({$table_alias}.{$pk}) AS total FROM $table as {$table_alias} $where",$args);
         $records = $count_res['total'];
@@ -159,7 +105,7 @@ class Setting extends AbstractAdmin{
         $order  = "ORDER BY $sort_field $sort_order";
         $left_join = self::get_join_sql();
         $sql = "SELECT $select_field FROM $table as {$table_alias} $left_join $where $order LIMIT $skip,$limit ";
-        self::_debug(array($sql,$args));
+        //self::_debug($sql);
         $rows = self::_db()->rows($sql,$args);
 
         $res = array(
@@ -178,43 +124,14 @@ class Setting extends AbstractAdmin{
             );
         return $res;
     }
-    static function getSaveRowValue($row,$key,$default=null){
-        return empty($row[$key]) ? $default : $row[$key];
-    }
-    static function getSaveRow($row,$is_add = true){
-        $row = json_decode($row,1);
-        if(empty($row['set_key'])) _throw("key不能为空");
 
-        $_row = array(
-            "set_key"=>self::getSaveRowValue($row,"set_key",""),
-            "set_title"=>self::getSaveRowValue($row,"set_title",""),
-            "set_value"=>self::getSaveRowValue($row,"set_value",""),
-        );
-
-        return array(
-            "row"=>$_row
-        );
-    }
-    function action_update($id,$row){
-        $res = self::getSaveRow($row,false);
-        $table = self::table();
-        $pk = self::pk();
-
-        self::_db()->update($table,$res['row'],array(
-            $pk=>$id
+    static function add($content,$method,$user_id,$ip = null){
+        self::_db()->insert(self::table(),array(
+            "content"=>$content,
+            "method"=>$method,
+            "ip"=>$ip,
+            "user_id"=>$user_id,
+            "add_time"=>Utils::date_time_now(),
         ));
-        $res = $this->action_row($id);
-        $res[$pk] = $id;
-        return $res;
-    }
-
-    function action_add($row){
-        $res = self::getSaveRow($row);
-        $table = self::table();
-        $pk = self::pk();
-        $id = self::_db()->insert($table,$res['row']);
-        $res = $this->action_row($id);
-        $res[$pk] = $id;
-        return $res;
     }
 }

@@ -53,19 +53,44 @@ export default Form.create()(React.createClass({
     },
     componentDidMount(){},
     render() {
-        const { getFieldProps } = this.props.form;
-        //let {roles} = this.props.parent.state;
-        let roles = [];
+        const { getFieldProps,departments } = this.props.form;
+        let {roles} = this.props.parent.state;
+
         return (
             <div style={{marginBottom: 16}}>
                 <Form horizontal className="advanced-search-form" key="more">
                     <Row>
                         <Col span="8">
                             <Form.Item
-                                label="Key："
+                                label="手机号："
                                 labelCol={{ span: 5 }}
                                 wrapperCol={{ span: 19 }}>
-                                <Input placeholder="请输入" {...getFieldProps('set_key')}/>
+                                <Input placeholder="请输入" {...getFieldProps('mobile')}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span="8">
+                            <Form.Item
+                                label="姓名："
+                                labelCol={{ span: 5 }}
+                                wrapperCol={{ span: 19 }}>
+                                <Input placeholder="请输入" {...getFieldProps('stf_name')}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span="8">
+                            <Form.Item
+                                label="角色："
+                                labelCol={{ span: 5 }}
+                                wrapperCol={{ span: 19 }}>
+                                <Select size="large" placeholder="请选择" {...getFieldProps('role_id')}>
+                                    <Option value="">不限</Option>
+                                    {
+                                        roles.map(role=>{
+                                            return (
+                                                <Option key={role.role_id} value={role.role_id}>{role.role_name}</Option>
+                                            )
+                                        })
+                                    }
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>

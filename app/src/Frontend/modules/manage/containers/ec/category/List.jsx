@@ -1,11 +1,13 @@
 'use strict';
 import React from 'react';
-import { Row,Col,Menu,Dropdown,Tooltip,message,Table,Popconfirm ,Icon , Button} from 'antd';
+import { Row,Col,Tooltip,message,Table,Popconfirm ,Icon , Button} from 'antd';
 
 import RowOptItemBox from '../../../components/widget/RowOptItemBox.jsx';
 import RowBox        from '../../../components/widget/RowBox.jsx';
 import ListBox       from '../../../components/widget/ListBox.jsx';
-import SearchPanel   from './SearchPanel.jsx';
+import ItemBox       from './ItemBox.jsx';
+
+import FormView             from './FormView.jsx';
 
 import config from './config';
 import './index.less';
@@ -19,6 +21,7 @@ export default React.createClass({
             showDetailView:false,
             showAddView:false,
             showUpdateView:false,
+            showPositionView:false,
 
             selectedRowKeys:[],
 
@@ -28,71 +31,50 @@ export default React.createClass({
             loading: false,
             loading_action_save:false,
             loading_action_remove:false,
-            columns:[
+            columns:  [
                 {
-                    title: 'ID',
-                    key:"key",
-                    dataIndex: 'key',
-                    width:60
-                },
-                {
-                    title: 'Uid',
-                    key:"user_id",
-                    dataIndex: 'user_id',
-                    width:90
-                },
-                {
-                    title: '进/出帐',
-                    key:"bil_type",
-                    dataIndex: 'bil_type'
-                },
-                {
-                    title: '类型',
-                    key:"bil_kind",
-                    dataIndex: 'bil_kind'
-                },
-                {
-                    title: '金额',
-                    key:"bil_amount",
-                    dataIndex: 'bil_kind'
-                },
-
-                {
-                    title: '备注',
-                    key:"bil_note",
-                    dataIndex: 'bil_note'
-                },
-
-                {
-                    title: '交易时间',
-                    key:"add_time",
-                    dataIndex: 'add_time'
+                    title: '',
+                    dataIndex: 'cat_name',
+                    key: 'cat_name',
+                    width: 250,
+                    className:"department_td",
+                    render:(value,row)=>{
+                        return <ItemBox option_action={this.option_action.bind(this,row)} parent={this} row={row}/>;
+                    }
                 }
-
             ],
+            rows_key_pid:[],
+            rows_key_name:[],
+            onExpandedRowsChange:[],
         };
     },
     option_action(row,e){
-        if(e.key == "修改"){
+        if(e.key == "edit"){
             this.action_update(row)
         }
-        if(e.key == "权限"){
-            this.action_show_permission_pannel(row)
+        if(e.key == "remove"){
+            if(!confirm("确认要删除么?")) return;
+            this.action_remove(row)
+        }
+        if(e.key == "add_sub"){
+            let _row = {
+                dep_name:"",
+                pid:row.key
+            };
+            this.action_update(_row)
         }
     },
-    action_remove(){
-        console.log("删除",this.state.selectedRowKeys)
-        if(this.state.selectedRowKeys.length == 0) return message.error("请选择要删除的记录");
+
+    action_remove(row){
+        console.log("删除",row.key)
         this.setState({ loading: true,loading_action_remove:true });
-        this.context.dataStore.actionPost(config.controller,"remove",{ids:this.state.selectedRowKeys.join(",")},(result,error)=>{
+        this.context.dataStore.actionPost(config.controller,"remove",{id:row.key},(result,error)=>{
             if(error){
+                message.error(result);
                 this.setState({loading: false,loading_action_remove:false});
             }else{
                 message.success("删除成功");
-                let { rows } = this.state;
-                this.setState({loading: false,selectedRowKeys:[],loading_action_remove:false,rows: rows.filter(row=>{
-                    return this.state.selectedRowKeys.findIndex(x => x === row.key) < 0
-                })});
+                this.action_list();
             }
         });
     },
@@ -127,7 +109,7 @@ export default React.createClass({
             rowKey = data.id = selectedRow.key;
         }
         data.row = JSON.stringify(row);
-        let action = selectedRow ? "update":"add";
+        let action = (selectedRow && selectedRow.key) ? "update":"add";
         this.setState({
             loading_action_save:true
         });
@@ -138,25 +120,12 @@ export default React.createClass({
                 });
                 return message.error(result);
             }else{
-                let {rows} = this.state;
-                selectedRow = result.row;
-                if(rowKey){
-                    rows.forEach(_row=>{
-                        if(_row.key == rowKey){
-                            Object.assign(_row,row)
-                        }
-                    });
-                    message.success("修改成功");
-                }else{
-                    message.success("新加成功");
-                    rows.unshift(result.row);
-                }
-
+                message.success("保存成功");
                 this.setState({
-                    rows,
-                    selectedRow,
+                    showAddView:false,showUpdateView:false,
                     loading_action_save:false
                 });
+                this.action_list();
             }
 
         });
@@ -168,18 +137,29 @@ export default React.createClass({
             if(error){
                 this.setState({loading: false});
             }else{
-                let { pagination } = this.state;
-                let {rows,total,limit,page} = result;
-                pagination.total = total;
-                pagination.pageSize = limit;
-                pagination.current = page;
+                let {rows,rows_key_pid,rows_key_name} = result;
                 if(this.isMounted()){
                     this.setState({
-                        loading: false,selectedRowKeys:[],
-                        pagination,rows
+                        loading: false,
+                        rows_key_pid,rows_key_name,
+                        expandedRowKeys:rows.length > 0 ? [rows[0].key]:[],
+                        rows
                     });
                 }
             }
+        });
+    },
+    get_is_parent(key){
+        let {rows_key_pid} = this.state;
+        for(let row_id in rows_key_pid){
+            let pid = rows_key_pid[row_id];
+            if(pid == key) return true;
+        }
+        return false;
+    },
+    onExpandedRowsChange(rows){
+        this.setState({
+            expandedRowKeys: rows,
         });
     },
     componentDidMount(){
@@ -187,18 +167,20 @@ export default React.createClass({
     },
     renderList(){
         return (
-            <div>
-                <SearchPanel parent={this} ref="search"/>
-                <ListBox hideAddBtn parent={this} ref="listTable"/>
-            </div>
-        );
-    },
-    renderDetail(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showDetailView:false})}}>
-                <DetailView parent={this}/>
-            </RowBox>
+            <Row style={{marginTop:16}}>
+                <Col span="24" className="department-list">
+                    <Table
+                        onExpandedRowsChange={this.onExpandedRowsChange}
+                        expandedRowKeys={this.state.expandedRowKeys}
+                        loading={this.state.loading}
+                        pagination={false}
+                        columns={this.state.columns}
+                        dataSource={this.state.rows}
+                        indentSize={20}
+                        showHeader={false}
+                        bordered={true}/>
+                </Col>
+            </Row>
         );
     },
     renderAdd(){
@@ -219,23 +201,13 @@ export default React.createClass({
             </RowBox>
         );
     },
-    renderPermission(){
-        return (
-            <RowBox parent={this}
-                    action_back={()=>{this.setState({showPermissionView:false})}}
-                    action_save={this.action_save_permission}>
-                <PermissionView ref="form" parent={this}/>
-            </RowBox>
-        );
-    },
-	render() {
+    render() {
+
         let result = null;
         let hideList = {};
         let hideUnList = {display:"none"};
         if(this.state.showAddView) {
             result = this.renderAdd()
-        }else if(this.state.showDetailView){
-            result = this.renderDetail()
         }else if(this.state.showUpdateView){
             result = this.renderUpdate()
         }
@@ -252,6 +224,6 @@ export default React.createClass({
                     {this.renderList()}
                 </div>
             </div>
-		);
-	}
+        );
+    }
 });

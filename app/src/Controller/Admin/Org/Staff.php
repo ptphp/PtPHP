@@ -133,7 +133,7 @@ class Staff extends AbstractAdmin{
     static function getSaveRow($row,$is_add = true){
         $row = json_decode($row,1);
         if(empty($row['stf_name'])) _throw("姓名不能为空");
-        if(!empty($row['mobile']) && !Utils::is_mobile($row['mobile'])) _throw("手机号不合法");
+        if(!Utils::is_mobile($row['mobile'])) _throw("手机号不合法");
 
         $_row = array(
             "stf_name"=>$row['stf_name'],
@@ -181,12 +181,20 @@ class Staff extends AbstractAdmin{
                 );
                 self::_db()->update(self::_table("user"),$user_row,array("user_id"=>$auth_user['user_id']));
             }else{
-                $user_row = array(
-                    "password"=>$password,
-                    "salt"=>$salt,
-                    "add_time"=>Utils::date_time_now(),
-                );
-                $user_id = self::_db()->insert(self::_table("user"),$user_row);
+                $table_user = self::_table("user");
+                $user_mobile = self::_db()->row("select user_id from $table_user where mobile = ?",$res['row']['mobile']);
+                if(!$user_mobile){
+                    $user_row = array(
+                        "password"=>$password,
+                        "salt"=>$salt,
+                        "mobile"=>$res['row']['mobile'],
+                        "add_time"=>Utils::date_time_now(),
+                    );
+                    $user_id = self::_db()->insert($table_user,$user_row);
+                }else{
+                    $user_id = $table_user['user_id'];
+                }
+
                 self::_db()->insert(self::_table("staff_user"),array(
                     "stf_id"=>$id,
                     "user_id"=>$user_id,
@@ -224,14 +232,22 @@ class Staff extends AbstractAdmin{
         unset($res['row']['password']);
         $id = self::_db()->insert($table,$res['row']);
         if($password){
-            $salt = \Model_Admin_Auth::gen_salt();
-            $password = \Model_Admin_Auth::gen_password($password,$salt);
-            $user_row = array(
-                "password"=>$password,
-                "salt"=>$salt,
-                "add_time"=>Utils::date_time_now(),
-            );
-            $user_id = self::_db()->insert(self::_table("user"),$user_row);
+            $table_user = self::_table("user");
+            $user_mobile = self::_db()->row("select user_id from $table_user where mobile = ?",$res['row']['mobile']);
+            if(!$user_mobile){
+                $salt = \Model_Admin_Auth::gen_salt();
+                $password = \Model_Admin_Auth::gen_password($password,$salt);
+                $user_row = array(
+                    "password"=>$password,
+                    "mobile"=>$res['row']['mobile'],
+                    "salt"=>$salt,
+                    "add_time"=>Utils::date_time_now(),
+                );
+                $user_id = self::_db()->insert($table_user,$user_row);
+            }else{
+                $user_id = $table_user['user_id'];
+            }
+
             self::_db()->insert(self::_table("staff_user"),array(
                 "stf_id"=>$id,
                 "user_id"=>$user_id,

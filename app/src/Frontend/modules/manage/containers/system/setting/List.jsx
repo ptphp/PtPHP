@@ -38,9 +38,21 @@ export default React.createClass({
                     width:60
                 },
                 {
-                    title: '地区名',
-                    key:"area_name",
-                    dataIndex: 'area_name'
+                    title: 'Key',
+                    key:"set_key",
+                    dataIndex: 'set_key',
+                    width:150
+                },
+                {
+                    title: 'Title',
+                    key:"set_title",
+                    dataIndex: 'set_title',
+                    width:150
+                },
+                {
+                    title: 'Value',
+                    key:"set_value",
+                    dataIndex: 'set_value'
                 },
                 {
                     title: '操作',

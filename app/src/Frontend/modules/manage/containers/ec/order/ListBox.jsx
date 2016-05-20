@@ -28,7 +28,7 @@ export default React.createClass({
         });
     },
     render(){
-        let {parent,hideAddBtn} = this.props;
+        let {parent} = this.props;
         let tableProps = {
             ref:"table",
             columns:parent.state.columns,
@@ -46,15 +46,12 @@ export default React.createClass({
                 <Row>
                     <Col span="12">
                         <Row type="flex" justify="start">
-                            <Col span="18">
-                                {
-                                    !hideAddBtn ?
-                                        <Button.Group style={{marginRight:20}}>
-                                            <Button type="primary" onClick={parent.action_add}>
-                                                <Icon type="plus" /> 新加
-                                            </Button>
-                                        </Button.Group>:null
-                                }
+                            <Col span="12" className="hide">
+                                <Button.Group>
+                                    <Button type="primary" onClick={parent.action_add}>
+                                        <Icon type="plus" /> 新加
+                                    </Button>
+                                </Button.Group>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <Popconfirm title="确定要删除吗？"
                                             placement="top"
                                             onConfirm={parent.action_remove}>
@@ -74,7 +71,7 @@ export default React.createClass({
                             </Col>
                         </Row>
                     </Col>
-                    <Col span="8">
+                    <Col span="12">
                         <Row type="flex" justify="end">
                             <Col>
 

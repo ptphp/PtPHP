@@ -25,10 +25,20 @@ const FormView = React.createClass({
                 <Row className="edit_row">
                     <Col span="12">
                         <Form.Item
-                            label="地区名："
+                            label="手机号："
                             labelCol={{ span:span_lable }}
                             wrapperCol={{ span: span_val }}>
-                            <Input {...getFieldProps('area_name', {initialValue: this.getFieldValue('area_name')})}/>
+                            <Input {...getFieldProps('mobile', {initialValue: this.getFieldValue('mobile')})}/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row className="edit_row">
+                    <Col span="12">
+                        <Form.Item
+                            label="密码："
+                            labelCol={{ span:span_lable }}
+                            wrapperCol={{ span: span_val }}>
+                            <Input {...getFieldProps('password', {initialValue: this.getFieldValue('password')})}/>
                         </Form.Item>
                     </Col>
                 </Row>

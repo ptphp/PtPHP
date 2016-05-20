@@ -62,10 +62,10 @@ export default Form.create()(React.createClass({
                     <Row>
                         <Col span="8">
                             <Form.Item
-                                label="地区名："
+                                label="UID："
                                 labelCol={{ span: 5 }}
                                 wrapperCol={{ span: 19 }}>
-                                <Input placeholder="请输入" {...getFieldProps('area_name')}/>
+                                <Input placeholder="请输入" {...getFieldProps('user_id')}/>
                             </Form.Item>
                         </Col>
                     </Row>
