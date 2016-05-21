@@ -10,8 +10,8 @@ use Controller\Admin\AbstractAdmin as AbstractAdmin;
 
 use PtPHP\Model as Model;
 use PtPHP\Utils as Utils;
-use Symfony\Component\Config\Definition\Exception\Exception;
-
+use Exception;
+use Model_Admin_Staff;
 class User extends AbstractAdmin{
     static function table(){
         return self::_table("user");
@@ -49,7 +49,7 @@ class User extends AbstractAdmin{
         $table = self::table();
         $left_join = self::get_join_sql();
         $table_alias = "u";
-        $row = self::_db()->row("select u.*,{$table_alias}.{$pk} as `key`,s.mobile as staff_mobile,i.*,f.* from $table as u $left_join where u.{$pk} = ?",$id);
+        $row = self::_db()->row("select {$table_alias}.{$pk} as `key`,s.mobile as staff_mobile,i.*,f.*,u.* from $table as u $left_join where u.{$pk} = ?",$id);
         $row['password'] = "";
         return array(
             "row"=>$row
@@ -73,7 +73,7 @@ class User extends AbstractAdmin{
         $pk = self::pk();
         $table_alias = "u";
         $table = self::table();
-        $select_field = "{$table_alias}.*,{$table_alias}.{$pk} as `key`,s.mobile as staff_mobile,i.*,f.*";
+        $select_field = "{$table_alias}.{$pk} as `key`,s.mobile as staff_mobile,i.*,f.*,{$table_alias}.*";
 
         $limit = empty($limit) ? 10 : intval($limit);
         $page  = empty($page)  ? 1  : intval($page);
@@ -153,11 +153,10 @@ class User extends AbstractAdmin{
         $res = self::getSaveRow($row,false);
         $table = self::table();
         $pk = self::pk();
-
-        if(!Utils::is_mobile($res['row']['mobile'])){
+        $mobile = $res['row']['mobile'];
+        if(!Utils::is_mobile($mobile)){
             _throw("手机号不合法");
         }
-
         $user_mobile = self::_db()->row("select mobile from $table where user_id <> ?  and mobile = ?",$id,$res['row']['mobile']);
         if($user_mobile){
             _throw("手机号已存在");
@@ -188,8 +187,8 @@ class User extends AbstractAdmin{
         if(!Utils::is_mobile($res['row']['mobile'])){
             _throw("手机号不合法");
         }
-
-        $user_mobile = self::_db()->row("select mobile from $table where mobile = ?",$res['row']['mobile']);
+        $mobile = $res['row']['mobile'];
+        $user_mobile = self::_db()->row("select mobile from $table where mobile = ?",$mobile);
         if($user_mobile){
             _throw("手机号已存在");
         }
@@ -201,9 +200,15 @@ class User extends AbstractAdmin{
         }else{
             _throw("密码不能为空");
         }
-        $id = self::_db()->insert($table,$res['row']);
-        $res = $this->action_row($id);
-        $res[$pk] = $id;
+        $user_id = self::_db()->insert($table,$res['row']);
+
+        $stf_id = Model_Admin_Staff::get_staff_id_by_mobile($mobile);
+
+        if($stf_id){
+            Model_Admin_Staff::bind_staff_user($stf_id,$user_id);
+        }
+        $res = $this->action_row($user_id);
+        $res['row'][$pk] = $user_id;
         return $res;
     }
 }

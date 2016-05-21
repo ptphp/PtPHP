@@ -160,6 +160,13 @@ class Model_Admin_Staff extends Model{
             return null;
         }
     }
+    static function bind_staff_user($stf_id,$user_id){
+        $table_staff_user = self::_table("staff_user");
+        self::_db()->insert($table_staff_user,array(
+            "stf_id"=>$stf_id,
+            "user_id"=>$user_id
+        ));
+    }
     static function get_auth_user_by_stf_id($staff_id){
         $table_staff_user = self::_table("staff_user");
         $table_user = self::_table("user");

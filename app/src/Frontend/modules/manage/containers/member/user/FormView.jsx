@@ -14,9 +14,14 @@ const FormView = React.createClass({
         return selectedRow && selectedRow[key] !== null ? selectedRow[key] : null;
     },
     componentDidMount(){
-
     },
 	render() {
+        let mobileProps = {};
+        if(this.props.parent.state.selectedRow &&
+            this.props.parent.state.selectedRow.staff_mobile &&
+            this.props.parent.state.selectedRow.staff_mobile.length > 0){
+            mobileProps.disabled = true;
+        }
         const { getFieldProps } = this.props.form;
         let span_lable = 4;
         let span_val = 20;
@@ -28,7 +33,7 @@ const FormView = React.createClass({
                             label="手机号："
                             labelCol={{ span:span_lable }}
                             wrapperCol={{ span: span_val }}>
-                            <Input {...getFieldProps('mobile', {initialValue: this.getFieldValue('mobile')})}/>
+                            <Input {...mobileProps} {...getFieldProps('mobile', {initialValue: this.getFieldValue('mobile')})}/>
                         </Form.Item>
                     </Col>
                 </Row>

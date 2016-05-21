@@ -23,7 +23,7 @@ class Role extends AbstractAdmin{
             $row = self::_db()->row("select * from $table role_id = ?",$id);
             if(!$row) _throw("记录不存在");
             self::_db()->delete($table,array(
-                "id"=>$id
+                "role_id"=>$id
             ));
         }
         if($ids){
