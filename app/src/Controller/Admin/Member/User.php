@@ -34,6 +34,9 @@ class User extends AbstractAdmin{
             self::_db()->delete($table,array(
                 $pk=>$id
             ));
+            self::_db()->delete(self::_table("staff_user"),array(
+                $pk=>$id
+            ));
         }
         if($ids){
             $ids = handle_mysql_in_ids($ids);

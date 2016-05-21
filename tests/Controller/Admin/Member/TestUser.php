@@ -45,13 +45,7 @@ class TestUser extends UnitTest{
     }
 
     function test_action_remove(){
-        $mobile = "18601628932";
-        $stf_id = \Model_Admin_Staff::get_staff_id_by_mobile($mobile);
-        if($stf_id){
-            $res = $this->obj->action_remove($stf_id,"1");
-            var_export($res);
-        }else{
-            throw new Exception("stf_id is null");
-        }
+        $res = $this->obj->action_remove(1,"1");
+        var_export($res);
     }
 }
