@@ -53,16 +53,20 @@
     cp phinx.dist.yml phinx.yml
     
     #系统配置
+    ##开发环境
     cp app/config/env/development.dist.php app/config/env/development.php
     
-    #前段配置
+    ##测试环境
+    cp app/config/env/testing.dist.php app/config/env/testing.php
+
+    #前端配置
     cp app/config/app.dist.json app/config/app.json
+    
     #webpack config
     cp webpack.config.dist.js webpack.config.js 
     
-    #系统环境(虚拟主机专用)
+    #系统环境(虚拟主机或者不能配置服务器环境变量专用)
     #cp app/config/.env.dist.php app/config/.env.php 
-    
     
 # 运行
     

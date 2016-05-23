@@ -11,18 +11,18 @@ environments:
         name: production_db
         user: root
         pass: ''
-        table_prefix: ldt_
+        table_prefix: pt_
         port: 3306
         charset: utf8
 
     development:
         adapter: mysql
         host: localhost
-        name: development_db
+        name: pro_ptphp
         user: root
-        pass: ''
-        table_prefix: ldt_
+        pass: 'root'
         port: 3306
+        table_prefix: pt_
         charset: utf8
 
     testing:
@@ -31,6 +31,6 @@ environments:
         name: testing_db
         user: root
         pass: ''
-        table_prefix: ldt_
+        table_prefix: pt_
         port: 3306
         charset: utf8
