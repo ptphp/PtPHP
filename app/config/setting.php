@@ -18,7 +18,7 @@ class PtConfig{
         "username"=>"",
         "password"=>"",
     );
-    public static $siteAdminTitle = "绿电通";
+    public static $siteAdminTitle = "PtPHP";
 }
 
 $env = Utils::get_pt_env("APPLICATION_ENV");

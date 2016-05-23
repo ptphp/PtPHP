@@ -12,7 +12,7 @@ ini_set( 'display_errors', 'On' );
 header('content-type:application:json;charset=utf8');
 header('Access-Control-Allow-Origin:*');
 header('Access-Control-Allow-Methods:POST, GET');
-header('Access-Control-Allow-Headers:x-requested-with,content-type');
+header('Access-Control-Allow-Headers:x-requested-with,content-type,X-File-Name');
 
 PtPHP\Logger::init(array(
     'level' => 'DEBUG', // none/off|(LEVEL)
@@ -20,5 +20,19 @@ PtPHP\Logger::init(array(
         'ALL'	=> PATH_PRO.'/logs/'.date("Y-m-d").'.log',
     ),
 ));
+PtPHP\PtRedis::$config = array(
+    "default"=>array(
+        "host"=>"127.0.0.1",
+        "port"=>6379
+    )
+);
+
 PtConfig::$safeLogin['username'] = "admin";
 PtConfig::$safeLogin['password'] = "admin@2016";
+
+
+Model_Wechat_Api::$config['appid'] = '';
+Model_Wechat_Api::$config['appsecret'] = '';
+
+Model_Wechat_Api::$config_open['appid'] = '';
+Model_Wechat_Api::$config_open['appsecret'] = '';

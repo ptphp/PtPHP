@@ -31,8 +31,8 @@ PtConfig::$safeLogin['username'] = "admin";
 PtConfig::$safeLogin['password'] = "admin@2016";
 
 
-Model_Wechat_Api::$config['appid'] = 'wxa19b2bb098f2de68';
-Model_Wechat_Api::$config['appsecret'] = '3c75f718d59de9403672304d8b0d94ff';
+Model_Wechat_Api::$config['appid'] = '';
+Model_Wechat_Api::$config['appsecret'] = '';
 
-Model_Wechat_Api::$config_open['appid'] = 'wx2d4f1d68e2980776';
-Model_Wechat_Api::$config_open['appsecret'] = 'd4624c36b6795d1d99dcf0547af5443d';
+Model_Wechat_Api::$config_open['appid'] = '';
+Model_Wechat_Api::$config_open['appsecret'] = '';
