@@ -68,6 +68,8 @@
     #系统环境(虚拟主机或者不能配置服务器环境变量专用)
     #cp app/config/.env.dist.php app/config/.env.php 
     
+    vendor/bin/phinx migrate
+    
 # 运行
     
     npm run start

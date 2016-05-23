@@ -22,6 +22,7 @@ class PtConfig{
 }
 
 $env = Utils::get_pt_env("APPLICATION_ENV");
+
 if($env){
     PtConfig::$env = $env;
 }else{
