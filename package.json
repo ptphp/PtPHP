@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "react",
   "scripts": {
-    "php": "php -S localhost:3080 -t ./webroot ./etc/php/router.php",
+    "php": "php -S 127.0.0.1:3080 -t ./webroot ./etc/php/router.php",
     "app": "node node_modules/react-native/local-cli/cli.js start",
     "start": "NODE_ENV=development webpack-dev-server --hot --inline --progress --colors --port 3079 --host 127.0.0.1",
     "build:pre": "rimraf ./webroot/mission/static/build/css/ ./webroot/mission/static/build/js/ ./webroot/mission/static/build/img/ ./webroot/mission/static/build/webpack-assets.json",
@@ -57,6 +57,7 @@
     "react-addons-css-transition-group": "^0.14.7",
     "react-addons-test-utils": "^0.14.3",
     "react-dom": "^0.14.2",
+    "react-icons": "^2.1.0",
     "react-router": "^2.0.1",
     "react-sentry": "^1.0.2",
     "react-tappable": "^0.8.1",

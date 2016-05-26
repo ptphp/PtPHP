@@ -82,3 +82,28 @@
 # 编译
 
     npm run build
+    
+
+
+# Resources
+
+- [react-icons](http://gorangajic.github.io/react-icons/index.html)
+- [phinx](https://phinx.org/)
+- [composer](http://docs.phpcomposer.com/)
+- [html-webpack-template](https://github.com/jaketrent/html-webpack-template)
+- [lodash](https://lodash.com/docs)
+- [ant.design](http://ant.design/docs/react/introduce)
+- [react](http://facebook.github.io/react/)
+- [iconfont](http://iconfont.cn/)
+
+# Author
+
+[joseph@ptphp.com](mailto:joseph@ptphp.com)
+
+### 文档
+
+- [phinx](./docs/phinx.md)
+
+### License
+
+The MIT License([http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT))

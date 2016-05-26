@@ -36,3 +36,6 @@ Model_Wechat_Api::$config['appsecret'] = '';
 
 Model_Wechat_Api::$config_open['appid'] = '';
 Model_Wechat_Api::$config_open['appsecret'] = '';
+
+Model_Tools_Yunpian::$apikey = "49ab7d33006f4a0f2abbf4f681f46811";
+//a7100dec

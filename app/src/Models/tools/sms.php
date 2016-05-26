@@ -28,6 +28,14 @@ class Model_Tools_Sms extends Model
         }
 
     }
+
+    /**
+     * @param $mobile
+     * @param $data
+     * @return mixed
+     * @throws AppException
+     * @throws Exception
+     */
     static function send_by_tpl($mobile,$data)
     {
         if(!self::$apikey) _throw("YUNPIN APIKEY IS NULL");

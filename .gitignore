@@ -34,7 +34,7 @@ tests/log
 phinx.yml
 
 webpack.config.js
-src/config/app.json
+app/config/app.json
 
 app/config/phinx.yml
 app/config/env/development.php
