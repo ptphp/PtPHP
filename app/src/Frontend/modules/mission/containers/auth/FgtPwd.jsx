@@ -28,7 +28,7 @@ import './index.less';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
     getInitialState(){
@@ -81,7 +81,7 @@ export default React.createClass( {
         var {mobile} = this.state;
         if(!Utils.checker.is_mobile(mobile)) return false;
         this.setState({loading:true});
-        this.context.dataStore.auth_get_reset_pwd_captcha(mobile,(result,error)=>{
+        this.context.store.auth_get_reset_pwd_captcha(mobile,(result,error)=>{
             if(error){
                 let {alert} = this.state;
                 alert.title = result;
@@ -120,7 +120,7 @@ export default React.createClass( {
         if(!captcha || captcha.length != 6) return false;
         if(password && password.length >= 6){
             this.setState({loading:true});
-            this.context.dataStore.auth_do_reset_pwd(mobile,password,captcha,(result,error)=>{
+            this.context.store.auth_do_reset_pwd(mobile,password,captcha,(result,error)=>{
                 if(error){
                     let {alert} = this.state;
                     alert.title = result;

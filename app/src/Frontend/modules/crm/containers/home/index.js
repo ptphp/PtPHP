@@ -22,7 +22,7 @@ import SwiperBox from "../../../../components/swiper/index";
 const HomeIndex = React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired,
     },
     getInitialState(){

@@ -28,7 +28,7 @@ import './index.less';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
     getInitialState(){
@@ -81,7 +81,7 @@ export default React.createClass( {
         var {mobile} = this.state;
         if(!Utils.checker.is_mobile(mobile)) return false;
         this.setState({loading:true});
-        this.context.dataStore.auth_get_reg_captcha(mobile,(result,error)=>{
+        this.context.store.auth_get_reg_captcha(mobile,(result,error)=>{
             if(error){
                 let {alert} = this.state;
                 alert.title = result;
@@ -120,7 +120,7 @@ export default React.createClass( {
         if(!captcha || captcha.length != 6) return false;
         if(password && password.length >= 6){
             this.setState({loading:true});
-            this.context.dataStore.auth_do_reg(mobile,password,captcha,(result,error)=>{
+            this.context.store.auth_do_reg(mobile,password,captcha,(result,error)=>{
                 console.log(result)
                 if(error){
                     let {alert} = this.state;
@@ -135,7 +135,7 @@ export default React.createClass( {
                         this.setState({toast_show: false});
                         this.showPwdModal();
                         //todo jump to other case?
-                        let redirect = this.context.dataStore.get_redirect();
+                        let redirect = this.context.store.get_redirect();
                         if(!redirect) redirect = "/";
                         this.context.router.push(redirect);
                     }, 1500);

@@ -21,7 +21,7 @@ export default React.createClass({
         location: React.PropTypes.object
     },
     childContextTypes: {
-        dataStore: React.PropTypes.object
+        store: React.PropTypes.object
     },
     getInitialState () {
         return {
@@ -29,7 +29,7 @@ export default React.createClass({
     },
     getChildContext () {
         return {
-            dataStore: dataStore
+            store: dataStore
         };
     },
     componentDidMount () {

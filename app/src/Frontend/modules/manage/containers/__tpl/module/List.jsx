@@ -16,7 +16,7 @@ import './index.less';
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {
@@ -70,7 +70,7 @@ export default React.createClass({
         console.log("删除",this.state.selectedRowKeys)
         if(this.state.selectedRowKeys.length == 0) return message.error("请选择要删除的记录");
         this.setState({ loading: true,loading_action_remove:true });
-        this.context.dataStore.actionPost(config.controller,"remove",{ids:this.state.selectedRowKeys.join(",")},(result,error)=>{
+        this.context.store.actionPost(config.controller,"remove",{ids:this.state.selectedRowKeys.join(",")},(result,error)=>{
             if(error){
                 this.setState({loading: false,loading_action_remove:false});
             }else{
@@ -117,7 +117,7 @@ export default React.createClass({
         this.setState({
             loading_action_save:true
         });
-        this.context.dataStore.actionPost(config.controller,action,data,(result,error)=>{
+        this.context.store.actionPost(config.controller,action,data,(result,error)=>{
             if(error){
                 this.setState({
                     loading_action_save:false
@@ -150,7 +150,7 @@ export default React.createClass({
     action_list(params = {}) {
         console.log("列表",params)
         this.setState({ loading: true });
-        this.context.dataStore.actionPost(config.controller,"list",params,(result,error)=>{
+        this.context.store.actionPost(config.controller,"list",params,(result,error)=>{
             if(error){
                 this.setState({loading: false});
             }else{

@@ -22,7 +22,7 @@ import './index.less';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired,
     },
     getInitialState(){
@@ -31,7 +31,7 @@ export default React.createClass( {
         }
     },
     componentDidMount(){
-        this.context.dataStore.mission_list((result,error)=>{
+        this.context.store.mission_list((result,error)=>{
             //console.log(result,error)
             if(error){
                 this.setState({loading:false});

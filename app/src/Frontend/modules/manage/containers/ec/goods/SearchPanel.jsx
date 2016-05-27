@@ -4,7 +4,7 @@ import { Form,Row,Col,Select,Input,message,Icon,Button,TreeSelect } from 'antd';
 
 export default Form.create()(React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {};
@@ -48,7 +48,7 @@ export default Form.create()(React.createClass({
 
     },
     clearSearch(){
-        //this.context.dataStore.del_mission_query()
+        //this.context.store.del_mission_query()
         this.doSearch(1);
     },
     componentDidMount(){},

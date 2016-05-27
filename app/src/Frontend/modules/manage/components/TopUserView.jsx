@@ -4,13 +4,13 @@ import {Icon, Dropdown, Menu} from 'antd';
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     doLogout(){
-        this.context.dataStore.logout();
+        this.context.store.logout();
     },
     render(){
-        let staff_info = this.context.dataStore.getAppSetting("staff");
+        let staff_info = this.context.store.getAppSetting("staff");
         let menu = (
             <Menu>
                 <Menu.Item>

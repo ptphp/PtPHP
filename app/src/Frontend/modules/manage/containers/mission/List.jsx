@@ -7,7 +7,7 @@ const config = require("./config");
 export default React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired,
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {
@@ -110,7 +110,7 @@ export default React.createClass({
     },
     onRemoveRow(key){
         this.setState({ loading: true });
-        this.context.dataStore.actionPost(config.controller,"remove",{id:key},(result,error)=>{
+        this.context.store.actionPost(config.controller,"remove",{id:key},(result,error)=>{
             if(error){
                 this.setState({loading: false});
             }else{
@@ -130,9 +130,9 @@ export default React.createClass({
         this.context.router.push(config.edit_url);
     },
     fetchList(params = {}) {
-        this.context.dataStore.set_mission_query(params);
+        this.context.store.set_mission_query(params);
         this.setState({ loading: true });
-        this.context.dataStore.actionPost(config.controller,"list",params,(result,error)=>{
+        this.context.store.actionPost(config.controller,"list",params,(result,error)=>{
             if(error){
                 this.setState({loading: false});
             }else{
@@ -191,11 +191,11 @@ export default React.createClass({
         });
     },
     clearSearch(){
-        this.context.dataStore.del_mission_query()
+        this.context.store.del_mission_query()
         this.doSearch(1);
     },
     componentDidMount(){
-        this.fetchList(this.context.dataStore.get_mission_query());
+        this.fetchList(this.context.store.get_mission_query());
     },
 	render() {
         const { loading, selectedRowKeys } = this.state;

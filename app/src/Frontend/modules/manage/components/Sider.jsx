@@ -10,7 +10,7 @@ const Sider = React.createClass({
     },
     contextTypes: {
         router: React.PropTypes.object.isRequired,
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     propTypes: {
         location: React.PropTypes.object
@@ -37,7 +37,7 @@ const Sider = React.createClass({
         };
     },
 	render() {
-        let { menus, site_title } = this.context.dataStore.getAppSetting("setting");
+        let { menus, site_title } = this.context.store.getAppSetting("setting");
         let { defaultSelectedKeys, defaultOpenKeys } = this.getKeys();
         //console.log(defaultSelectedKeys, defaultOpenKeys);
         let menuProps = {

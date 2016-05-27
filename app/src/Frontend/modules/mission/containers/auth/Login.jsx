@@ -29,7 +29,7 @@ import './index.less';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
     getInitialState(){
@@ -102,7 +102,7 @@ export default React.createClass( {
             return false;
         }
         this.setState({loading:true});
-        this.context.dataStore.auth_do_login(username,password,(result,error)=>{
+        this.context.store.auth_do_login(username,password,(result,error)=>{
             if(error){
                 let {alert} = this.state;
                 alert.title = result;
@@ -116,7 +116,7 @@ export default React.createClass( {
                 this.state.toastTimer = setTimeout(()=> {
                     this.setState({toast_show: false});
                     //todo jump to other case?
-                    let redirect = this.context.dataStore.get_redirect();
+                    let redirect = this.context.store.get_redirect();
                     if(!redirect) redirect = "/";
                     this.context.router.push(redirect);
                 }, 1500);

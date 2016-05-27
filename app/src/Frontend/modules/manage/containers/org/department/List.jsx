@@ -16,7 +16,7 @@ import './index.less';
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {
@@ -80,7 +80,7 @@ export default React.createClass({
         }
     },
     action_remove_position(pot_id){
-        this.context.dataStore.actionPost(config.controller_position,"remove",{id:pot_id},(result,error)=>{
+        this.context.store.actionPost(config.controller_position,"remove",{id:pot_id},(result,error)=>{
             if(error){
                 return message.error(result);
             }else{
@@ -92,7 +92,7 @@ export default React.createClass({
     action_remove(row){
         console.log("删除",row.key)
         this.setState({ loading: true,loading_action_remove:true });
-        this.context.dataStore.actionPost(config.controller,"remove",{id:row.key},(result,error)=>{
+        this.context.store.actionPost(config.controller,"remove",{id:row.key},(result,error)=>{
             if(error){
                 message.error(result);
                 this.setState({loading: false,loading_action_remove:false});
@@ -154,7 +154,7 @@ export default React.createClass({
         this.setState({
             loading_action_save:true
         });
-        this.context.dataStore.actionPost(config.controller_position,action,data,(result,error)=>{
+        this.context.store.actionPost(config.controller_position,action,data,(result,error)=>{
             if(error){
                 this.setState({
                     loading_action_save:false
@@ -185,7 +185,7 @@ export default React.createClass({
         this.setState({
             loading_action_save:true
         });
-        this.context.dataStore.actionPost(config.controller,action,data,(result,error)=>{
+        this.context.store.actionPost(config.controller,action,data,(result,error)=>{
             if(error){
                 this.setState({
                     loading_action_save:false
@@ -205,7 +205,7 @@ export default React.createClass({
     action_list(params = {}) {
         console.log("列表",params)
         this.setState({ loading: true });
-        this.context.dataStore.actionPost(config.controller,"list",params,(result,error)=>{
+        this.context.store.actionPost(config.controller,"list",params,(result,error)=>{
             if(error){
                 this.setState({loading: false});
             }else{

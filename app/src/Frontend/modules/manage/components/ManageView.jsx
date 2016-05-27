@@ -8,7 +8,7 @@ import TopUserView from "./TopUserView";
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
     propTypes: {
@@ -23,12 +23,12 @@ export default React.createClass({
     },
     componentDidMount () {
         //console.log("ManageView componentDidMount",this.context.dataStore);
-        this.watch(this.context.dataStore, 'not-login', ()=> {
+        this.watch(this.context.store, 'not-login', ()=> {
             //console.log("app not login",this.props.location.pathname);
             if(window.sync_time_id) {clearTimeout(window.sync_time_id);}
             this.context.router.push('/auth/login?redirect=' + this.props.location.pathname);
         });
-        this.context.dataStore.loadSetting((result,error)=>{
+        this.context.store.loadSetting((result,error)=>{
             if(!error){
                 if(this.isMounted()){
                     this.setState({
@@ -36,7 +36,7 @@ export default React.createClass({
                     });
                 }
                 if(window.sync_time_id) {clearTimeout(window.sync_time_id);}
-                this.context.dataStore.synchronize();
+                this.context.store.synchronize();
             }
         });
     },

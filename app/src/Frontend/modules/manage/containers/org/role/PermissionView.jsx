@@ -6,7 +6,7 @@ import './index.less';
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {};

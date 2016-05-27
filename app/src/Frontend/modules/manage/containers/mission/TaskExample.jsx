@@ -7,7 +7,7 @@ import EditorView from '../../components/tools/EditorView.jsx';
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState(){
         return {
@@ -19,7 +19,7 @@ export default React.createClass({
         //console.log(window['editor_task_example'] && window['editor_task_example'].getValue());
         let { selectedRow } = this.props.parent.state;
         var example = window['editor_task_example'] ? window['editor_task_example'].getValue() : "";
-        this.context.dataStore.save_task_example(selectedRow.id,example,(result,error)=>{
+        this.context.store.save_task_example(selectedRow.id,example,(result,error)=>{
             this.props.parent.state.selectedRow.example = example;
             this.props.parent.setState({modalVisible:false});
         });

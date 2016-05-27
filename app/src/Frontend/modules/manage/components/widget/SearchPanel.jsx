@@ -4,7 +4,7 @@ import { Form,Row,Col,Select,Input,message,Icon,Button,TreeSelect } from 'antd';
 
 export default Form.create()(React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {};

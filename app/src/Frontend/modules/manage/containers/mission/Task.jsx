@@ -8,7 +8,7 @@ import TaskExample from './TaskExample.jsx'
 export default React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired,
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState(){
         return {
@@ -115,7 +115,7 @@ export default React.createClass({
         });
     },
     removeRow(id){
-        this.context.dataStore.actionPost(config.controller, "remove_task", {id: id}, (result, error)=> {
+        this.context.store.actionPost(config.controller, "remove_task", {id: id}, (result, error)=> {
             if (error) {
                 return message.error(result)
             } else {

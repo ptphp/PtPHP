@@ -21,7 +21,7 @@ import './index.less';
 const PackageIndex = React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired,
     },
     getInitialState(){

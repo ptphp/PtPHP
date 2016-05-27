@@ -4,7 +4,7 @@ import { Row,Col,Tooltip,message,Table,Popconfirm ,Icon , Button} from 'antd';
 
 export default React.createClass({
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {};

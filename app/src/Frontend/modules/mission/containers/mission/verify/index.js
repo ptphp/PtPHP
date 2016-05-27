@@ -27,7 +27,7 @@ import './index.less';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
     getInitialState(){
@@ -96,7 +96,7 @@ export default React.createClass( {
         this.setState({
             loading:true
         });
-        this.context.dataStore.do_verify($mession_id,$task_key,pics.join("|"),$note,(result,error)=>{
+        this.context.store.do_verify($mession_id,$task_key,pics.join("|"),$note,(result,error)=>{
             if(error){
                 //alert(result);
             }else{

@@ -19,7 +19,7 @@ import iconSrc from './../../components/tabbar/img/home.png';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired,
     },
     getInitialState(){

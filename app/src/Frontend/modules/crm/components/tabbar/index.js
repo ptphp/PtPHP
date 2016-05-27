@@ -32,7 +32,7 @@ import IconContactOn from './img/icon/contact_on.svg';
 export default React.createClass( {
 
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
     getInitialState(){

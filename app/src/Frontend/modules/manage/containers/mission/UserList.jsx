@@ -12,7 +12,7 @@ import UserAvatarBox from "../../components/avatar/index";
 export default React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired,
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState(){
         return {
@@ -87,7 +87,7 @@ export default React.createClass({
     },
     onShowTaskDetail(user_id,mission_id,task_key){
         //console.log(user_id,mission_id,task_key)
-        this.context.dataStore.get_verify_task(user_id,mission_id,task_key,(result,error)=>{
+        this.context.store.get_verify_task(user_id,mission_id,task_key,(result,error)=>{
             if(result.tasks.length == 0){
                 return message.warn("还没提交审核");
             }
@@ -264,9 +264,9 @@ export default React.createClass({
         this.setState({
             loadingSuccess:true
         });
-        this.context.dataStore.do_verify(id,flag,this.state.reason,(result,error)=>{
+        this.context.store.do_verify(id,flag,this.state.reason,(result,error)=>{
             let{user_id,mission_id,task_key} = result;
-            this.context.dataStore.get_verify_task(user_id,mission_id,task_key,(result,error)=>{
+            this.context.store.get_verify_task(user_id,mission_id,task_key,(result,error)=>{
                 if(error){
                     return message.warn(result);
                 }

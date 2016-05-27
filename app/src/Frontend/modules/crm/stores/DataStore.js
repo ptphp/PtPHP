@@ -39,47 +39,11 @@ if( window.production){
 }
 function DataStore() {
     EventEmitter.call(this);
-    // assign localStorage to our internal cache
     this.appSetting = {};
-    var storage = this.cache =  {
-        settings:{}
-    };
-    for (var key in window.localStorage) {
-        try {
-            if (key.indexOf(setting.cache_prefix) === 0){
-                storage[key] = JSON.parse(window.localStorage[key]);
-            }
-        } catch (e){
-            console.error(e.message());
-        }
-
-    }
-    // default our internal cache to pre-loaded data
-    //defaults(storage, defaultData);
-    this.__preprocess(storage);
 }
-
-// mutates data
-DataStore.prototype.__preprocess = function (data) {
-
-};
 
 Object.assign(DataStore.prototype, EventEmitter.prototype);
 
-// Synchronized, external API functions
-//DataStore.prototype.feedback = function (id, feedback, callback) {
-//    this.cache.feedback[id] = feedback;
-//    // update feedback cache
-//    this.cache.schedule.forEach(function (talk) {
-//        if (talk.id !== id) return;
-//        talk.feedback = feedback;
-//    });
-//
-//    this.apiQueue.push({
-//        endpoint: '/me/feedback',
-//        data: Object.assign({id: id}, feedback)
-//    }, callback || function () {})
-//};
 
 DataStore.prototype.actionPost = function (controller,action,data,callback) {
     var packet = Object.assign({

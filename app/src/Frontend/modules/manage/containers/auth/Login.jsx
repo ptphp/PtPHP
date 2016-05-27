@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 export default Form.create()(React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired,
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     propTypes: {
         form: React.PropTypes.object
@@ -45,11 +45,11 @@ export default Form.create()(React.createClass({
             data.username = encrypt.encrypt(data.username);
             data.password = encrypt.encrypt(data.password);
         }
-        this.context.dataStore.doLogin(data,(result,error)=>{
+        this.context.store.doLogin(data,(result,error)=>{
             this.setState({loading: false});
             if(!error){
                 message.success(result.message);
-                this.context.dataStore.setLogin();
+                this.context.store.setLogin();
                 setTimeout(()=>{
                     this.context.router.push("/");
                 },1000);
@@ -57,11 +57,11 @@ export default Form.create()(React.createClass({
         });
     },
     goWechatLogin(){
-        location.href = this.dataStore.getWechatLoginUrl();
+        location.href = this.store.getWechatLoginUrl();
     },
     componentDidMount(){
         this.setState({loading: true},()=>{
-            this.context.dataStore.getAuthInfo(({encryptData,useRsaAuth})=>{
+            this.context.store.getAuthInfo(({encryptData,useRsaAuth})=>{
                 //console.log(encryptData);
                 this.setState({
                     encryptData,

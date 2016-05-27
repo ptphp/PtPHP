@@ -5,9 +5,6 @@ var Sentry = require('react-sentry');
 var DataStore = require('../stores/DataStore');
 var dataStore = new DataStore();
 window.dataStore = dataStore;
-if(DEBUG) {
-    require('../stores/DataStoreTest');
-}
 
 import '../../../libs/weui/weui.min.css';
 import '../../../style/weui.less';
@@ -19,15 +16,16 @@ export default React.createClass({
         location: React.PropTypes.object
     },
     childContextTypes: {
-        dataStore: React.PropTypes.object
+        store: React.PropTypes.object,
     },
     getChildContext () {
         return {
-            dataStore: dataStore
+            store: dataStore,
         };
     },
     getInitialState () {
         return {
+
         };
     },
     componentDidMount () {

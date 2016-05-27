@@ -13,7 +13,7 @@ const TabPane = Tabs.TabPane;
 export default React.createClass({
     contextTypes: {
         router: React.PropTypes.object.isRequired,
-        dataStore: React.PropTypes.object.isRequired
+        store: React.PropTypes.object.isRequired
     },
     getInitialState() {
         return {
@@ -30,7 +30,7 @@ export default React.createClass({
     },
     fetchRow(){
         this.setState({loading:true});
-        this.context.dataStore.actionPost(config.controller,"row",{id:this.state.rowKey},(result,error)=>{
+        this.context.store.actionPost(config.controller,"row",{id:this.state.rowKey},(result,error)=>{
             if(error){
                 if(this.isMounted())
                     this.setState({loading:false});

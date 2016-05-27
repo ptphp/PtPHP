@@ -39,7 +39,7 @@ import './index.less';
 export default React.createClass( {
     mixins: [Sentry],
     contextTypes: {
-        dataStore: React.PropTypes.object.isRequired,
+        store: React.PropTypes.object.isRequired,
         router: React.PropTypes.object.isRequired
     },
 
@@ -51,7 +51,7 @@ export default React.createClass( {
     },
     getDetail(){
         this.setState({loading:true});
-        this.context.dataStore.mission_example(this.props.params.id,(result,error)=>{
+        this.context.store.mission_example(this.props.params.id,(result,error)=>{
             if(error){
                 this.setState({loading:false});
             }else{
