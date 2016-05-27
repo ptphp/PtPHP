@@ -23,8 +23,11 @@ webpackConfig = {
         loaders:[
             {
                 test: /\.js[x]?$/,
-                exclude: /node_modules/,
-                loader: 'babel'
+                //exclude: /node_modules/,
+                include: [
+                    config.paths.source,
+                    config.paths.reactIcons
+                ],
             }, {
                 test: /\.(png|jpg|svg)$/,
                 loader: config.webpack.imgLoader

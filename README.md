@@ -72,8 +72,7 @@
     
 # 运行
     
-    npm run start
-    npm run php
+    npm start
 
 # open in browser
 
@@ -83,11 +82,9 @@
 
     npm run build
     
-
-
 # Resources
 
-- [react-icons](http://gorangajic.github.io/react-icons/index.html)
+- [react-icons](https://github.com/gorangajic/react-icons)
 - [phinx](https://phinx.org/)
 - [composer](http://docs.phpcomposer.com/)
 - [html-webpack-template](https://github.com/jaketrent/html-webpack-template)

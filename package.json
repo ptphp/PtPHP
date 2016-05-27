@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "description": "react",
   "scripts": {
-    "php": "php -S 127.0.0.1:3080 -t ./webroot ./etc/php/router.php",
-    "app": "node node_modules/react-native/local-cli/cli.js start",
-    "start": "NODE_ENV=development webpack-dev-server --hot --inline --progress --colors --port 3079 --host 127.0.0.1",
+    "start": "npm run dev:php | npm run dev:react",
+    "dev:php": "php -S 127.0.0.1:3080 -t ./webroot ./etc/php/router.php",
+    "dev:react": "NODE_ENV=development webpack-dev-server --hot --inline --progress --colors --port 3079 --host 127.0.0.1",
     "build:pre": "rimraf ./webroot/mission/static/build/css/ ./webroot/mission/static/build/js/ ./webroot/mission/static/build/img/ ./webroot/mission/static/build/webpack-assets.json",
     "build:after": "touch ./webroot/mission/static/assets/webpack-assets.json && cp ./webroot/mission/static/assets/webpack-assets.json ./logs/webpack-assets.$(date \"+%Y_%m_%d_%H_%M_%S\").json && cp -R ./webroot/mission/static/build/* ./webroot/mission/static/assets/",
     "build": "npm run build:pre && NODE_ENV=production webpack && npm run build:after",
@@ -29,6 +29,7 @@
   "author": "joseph",
   "license": "MIT",
   "dependencies": {
+    "babel-polyfill": "^6.9.0",
     "classnames": "^2.2.0",
     "react": "^0.14.2"
   },
@@ -37,9 +38,9 @@
     "assets-webpack-plugin": "^3.4.0",
     "autoprefixer": "^6.3.5",
     "babel": "^5.8.23",
-    "babel-core": "^5.8.23",
+    "babel-core": "^5.8.38",
     "babel-eslint": "^4.1.6",
-    "babel-loader": "^5.3.2",
+    "babel-loader": "^5.4.0",
     "css-loader": "^0.23.0",
     "enzyme": "^1.1.0",
     "eslint": "^1.10.3",

@@ -5,15 +5,19 @@
 "use strict";
 
 import React from 'react';
+
+import FaBeer1 from 'react-icons/lib/fa/user';
+import MdIconPack from 'react-icons/lib/fa/wechat'
+
 import {Icon,Ico} from '../../../../index';
 import Page from '../../component/page';
 import './icons.less';
 
 export default class IconDemo extends React.Component {
-
     render() {
         return (
             <Page className="icons" title="Icons" spacing>
+                <FaBeer1 style={{fontSize:32,color:"blue"}}/>
                 <div className="icon_sp_area">
                     <Ico value="arrow_left"/>
                     <Ico value="arrow_right"/>
